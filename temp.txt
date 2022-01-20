@@ -1,0 +1,59 @@
+My Micro Blog についてあれこれ
+
+##############################################
+利用規約とか
+##############################################
+
+当プログラムは富士見永人が個人の日記公開向けに開発したものであり、極めてシンプルなWEBサーバープログラムです。
+
+MITライセンスでの配布となります。
+著作権表示とライセンス表示をしていただければ改変、再配布してくださって構いません。
+当プログラムを使用して発生した如何なる問題にも作者は責任を負いません。
+詳しくはMITライセンスでググってください。
+　
+本プログラムの利用を開始した時点で規約に同意したとみなされます。
+　
+バグなどの不具合報告があれば可能な範囲で対応する予定ですが、多忙につき保障はできません。
+極めてシンプルかつ短期間でインスタント開発されているため、フォルダ名を変えたりリストの書き方を間違えたりすると容赦なくバグります。
+
+
+##############################################
+使い方
+##############################################
+
+サンプルを参考に、articles フォルダの直下に記事の .txt ファイルを作ります。
+ファイル名は「西暦4桁 + 月2桁 + 日2桁」の、計8桁の半角数字にしてください（例：20220101.txt）。
+違う名前にするとバグります。
+
+プロジェクトフォルダ直下に「list.txt」というテキストファイルがあります。
+これをサンプルを参考に、「記事の日付8桁（＝記事ファイルの名前）|タイトル|カテゴリ1|カテゴリ2」という書式で目次を書き込みます。
+
+プロジェクトフォルダ直下にある「setting.txt」というファイルにいろいろ設定が書いてあります。
+「Max:5」というのは、1回の読み込みで記事を最大5つまで表示するという意味です。
+「Fold:true」は、記事が長すぎる場合に自動的に省略して「続きを見る」リンクを生成するという意味です。「Fold:false」にすると全部そのまま表示します。
+
+
+
+############################################################################################
+############################################################################################
+About My Micro Blog (MMB)
+
+##############################################
+Terms of service
+##############################################
+
+This "My Micro Blog (MMB)" is the App that I "Enin Fujimi" developed for exhibition my diary.
+
+MMB is MIT license.
+If specify a copyright, you can edit PNS and give it out on the Web.
+I never take responsibility even if PNS leads any troubles.
+
+I regard you accept this agreement as you start to use MMB.
+
+If you find any bug, tell me it. I will fix the bugs, but I don't know when it resolves.
+
+MMB is very simple and being developed quickly.
+If you change any folder name or mistake the syntax of each TXT files, MMB will be not working. Be careful.
+
+
+Copyright (C) Enin Fujimi All Rights Reserved.
