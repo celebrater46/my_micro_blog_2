@@ -35,6 +35,7 @@ foreach ($category_array as $name) {
 $j = 0;
 foreach ($month_array as $month) {
     array_push($months, new Month($j, $month, $list));
+    $j++;
 }
 
 foreach ($list as $line){
@@ -90,8 +91,11 @@ function h($s) {
 
         <div class="flex">
             <div class="main">
+
                 <?php if ($category_id !== "") : ?>
                     <h2><?php echo $categories[$category_id]->name; ?></h2>
+                <?php elseif ($month_id !== "") : ?>
+                    <h2><?php echo $months[$month_id]->month_string; ?></h2>
                 <?php endif; ?>
 
                 <?php foreach ($articles as $article) : ?>
@@ -125,11 +129,12 @@ function h($s) {
                 </div>
 
                 <div>
+                    <hr>
                     <h2>アーカイブ</h2>
                     <ul>
                         <?php foreach ($months as $month) : ?>
                             <li>
-                                <a href="index.php?category=<?php echo $month->month; ?>">
+                                <a href="index.php?month=<?php echo $month->id; ?>">
                                     <?php echo $month->month_string; ?>
                                 </a>
                             </li>
