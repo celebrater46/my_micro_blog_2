@@ -36,11 +36,13 @@ class Article
     function get_text(){
         $temp = [];
         if(file_exists("articles/" . (string)$this->date . ".txt")){
-            $temp = file("articles/" . (string)$this->date . ".txt");
+            $temp2 = file("articles/" . (string)$this->date . ".txt");
+            $temp3 = $this->convert_num_tags($temp2);
+            return $this->convert_blank_to_space($temp3);
         } else {
             $temp = ["記事ファイル「" . $this->date . ".txt」が存在しないか、読み込めません。"];
+            return $temp;
         }
-        return $this->convert_blank_to_space($temp);
     }
 
     function convert_blank_to_space($array){
@@ -59,9 +61,16 @@ class Article
         $temp_array = [];
         foreach ($array as $line){
             if(strpos($line,"<") !== false){
-                $temp = preg_replace("/\<\/[1-7]\>/", "</span>", $line);
+//                $ptn = "/\<([1-7])\>/";
+//                $rp = "<span class='f$1'>";
+                $temp = preg_replace("/\<([1-7])\>/", "<span class='f$1'>", $line);
+                $temp2 = preg_replace("/\<\/[1-7]\>/", "</span>", $temp);
+                array_push($temp_array, $temp2);
+            } else {
+                array_push($temp_array, $line);
             }
         }
+        return $temp_array;
     }
 
 //    function replace_num_tags($line){

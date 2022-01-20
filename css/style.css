@@ -79,3 +79,35 @@ div.text p{
     padding: 0;
     line-height: 150%;
 }
+
+span {
+    line-height: 1.3em;
+}
+
+span.f1{
+    font-size: 0.4em;
+}
+
+span.f2{
+    font-size: 0.6em;
+}
+
+span.f3{
+    font-size: 0.8em;
+}
+
+span.f4{
+    font-size: 1em;
+}
+
+span.f5{
+    font-size: 1.5em;
+}
+
+span.f6{
+    font-size: 2em;
+}
+
+span.f7{
+    font-size: 3em;
+}
