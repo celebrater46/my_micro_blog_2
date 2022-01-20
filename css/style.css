@@ -3,4 +3,54 @@
 body {
     background-color: black;
     color: silver;
+    font-size: 18px;
+    text-align: center;
+}
+
+h1 a{
+    font-size: 2em;
+}
+
+h2{
+    margin: 0;
+    padding: 0;
+    font-size: 1.6em;
+}
+
+hr{
+    opacity: 0.5;
+}
+
+a{
+    text-decoration: none;
+    color: goldenrod;
+}
+
+a:hover{
+    color: gold;
+}
+
+div.container{
+    width: 1000px;
+    text-align: left;
+    margin: 20px auto;
+}
+
+div.description{
+    margin: 0 auto 50px;
+}
+
+div.date{
+    margin: 0;
+    padding: 10px 0 0;
+}
+
+div.text{
+    margin: 20px auto;
+}
+
+div.text p{
+    margin: 0;
+    padding: 0;
+    line-height: 150%;
 }

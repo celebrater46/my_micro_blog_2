@@ -1,6 +1,15 @@
 <?php
 
-$test_url = "test";
+// Copyright (C) Enin Fujimi All Rights Reserved.
+
+require_once "Article.php";
+
+$list = file("list.txt"); // 220101|これはタイトルです|カテゴリ1|カテゴリ2, 220103|テストタイトルです|カテゴリ3|カテゴリ2...
+$articles = [];
+
+foreach ($list as $line){
+    array_push($articles, new Article($line));
+}
 
 function h($s) {
     return htmlspecialchars($s, ENT_QUOTES, "UTF-8");
@@ -16,11 +25,29 @@ function h($s) {
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-    <h1>
-        <a href="/?t=<?php echo h($test_url); ?>">
-            Hello World!
-        </a>
-    </h1>
+    <div class="container">
+        <h1>
+            <a href="/">
+                My Micro Blog
+            </a>
+        </h1>
+        <div class="description">私のマイクロなブログです。</div>
 
+        <?php foreach ($articles as $article) : ?>
+            <div class="article">
+                <hr>
+                <div class="date">
+                    <?php echo $article->date_string; ?>　｜　<?php echo $article->category1; ?>　｜　<?php echo $article->category2; ?>
+                </div>
+                <h2><?php echo $article->title; ?></h2>
+                <div class="text">
+                    <?php foreach ($article->text as $line) : ?>
+                        <p><?php echo $line ?></p>
+                    <?php endforeach; ?>
+                </div>
+            </div>
+        <?php endforeach; ?>
+
+    </div>
 </body>
 </html>
