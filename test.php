@@ -13,4 +13,4 @@ $rp = "<span class='f$1'>$2</span>";
 
 $temp = preg_replace($ptn, $rp, $line);
 
-var_dump($temp);
+var_dump($temp); // string(33) "<span class='f6'>大晦日</span>"
