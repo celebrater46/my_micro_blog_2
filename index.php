@@ -9,9 +9,16 @@ $list = file("list.txt"); // 220101|これはタイトルです|カテゴリ1|�
 $articles = [];
 $category_array = get_category_array($list);
 $categories = [];
+$category_id = "";
 
+if(isset($_GET["category"])){
+    $category_id = $_GET["category"];
+}
+
+$i = 0;
 foreach ($category_array as $name) {
-    array_push($categories, new Category($name, $list));
+    array_push($categories, new Category($i, $name, $list));
+    $i++;
 }
 
 foreach ($list as $line){
@@ -55,21 +62,43 @@ function h($s) {
         </h1>
         <div class="description">私のマイクロなブログです。</div>
 
-        <?php var_dump($categories); ?>
-        <?php foreach ($articles as $article) : ?>
-            <div class="article">
-                <hr>
-                <div class="date">
-                    <?php echo $article->date_string; ?>　｜　<?php echo $article->category1; ?>　｜　<?php echo $article->category2; ?>
-                </div>
-                <h2><?php echo $article->title; ?></h2>
-                <div class="text">
-                    <?php foreach ($article->text as $line) : ?>
-                        <p><?php echo $line ?></p>
-                    <?php endforeach; ?>
-                </div>
+        <div class="flex">
+            <div class="main">
+                <?php if ($category_id !== "") : ?>
+                    <h2><?php echo $categories[$category_id]->name; ?></h2>
+                <?php endif; ?>
+
+                <?php foreach ($articles as $article) : ?>
+                    <div class="article">
+                        <hr>
+                        <div class="date">
+                            <?php echo $article->date_string; ?>　｜　<?php echo $article->category1; ?>　｜　<?php echo $article->category2; ?>
+                        </div>
+                        <h2><?php echo $article->title; ?></h2>
+                        <div class="text">
+                            <?php foreach ($article->text as $line) : ?>
+                                <p><?php echo $line ?></p>
+                            <?php endforeach; ?>
+                        </div>
+                    </div>
+                <?php endforeach; ?>
             </div>
-        <?php endforeach; ?>
+
+            <div class="side">
+                <div>
+                    <ul>
+                        <?php foreach ($categories as $category) : ?>
+                            <li>
+                                <a href="index.php?category=<?php echo $category->id; ?>">
+                                    <?php echo $category->name; ?>
+                                </a>
+                            </li>
+                        <?php endforeach; ?>
+                    </ul>
+                </div>
+
+            </div>
+        </div>
 
     </div>
 </body>

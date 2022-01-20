@@ -2,11 +2,13 @@
 
 class Category
 {
+    public $id;
     public $name;
     public $articles = [];
 
-    function __construct($name, $list){
+    function __construct($id, $name, $list){
         // $list == "20220102|タイトル|カテゴリ1|カテゴリ2", ...
+        $this->id = $id;
         $this->name = $name;
         foreach ($list as $line){
             $temp = explode("|", $line);

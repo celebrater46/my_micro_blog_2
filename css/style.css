@@ -30,6 +30,10 @@ a:hover{
     color: gold;
 }
 
+ul{
+    list-style: none;
+}
+
 div.container{
     width: 1000px;
     text-align: left;
@@ -38,6 +42,19 @@ div.container{
 
 div.description{
     margin: 0 auto 50px;
+}
+
+div.flex{
+    display: flex;
+}
+
+div.main{
+    width: 70%;
+}
+
+div.side{
+    width: 30%;
+    background-color: #222222;
 }
 
 div.date{
