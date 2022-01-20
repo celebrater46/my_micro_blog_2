@@ -34,7 +34,12 @@ class Article
     }
 
     function get_text(){
-        $temp = file("articles/" . (string)$this->date . ".txt");
+        $temp = [];
+        if(file_exists("articles/" . (string)$this->date . ".txt")){
+            $temp = file("articles/" . (string)$this->date . ".txt");
+        } else {
+            $temp = ["記事ファイル「" . $this->date . ".txt」が存在しないか、読み込めません。"];
+        }
         return $this->convert_blank_to_space($temp);
     }
 
@@ -49,6 +54,19 @@ class Article
         }
         return $temp_array;
     }
+
+    function convert_num_tags($array){
+        $temp_array = [];
+        foreach ($array as $line){
+            if(strpos($line,"<") !== false){
+                $temp = preg_replace("/\<\/[1-7]\>/", "</span>", $line);
+            }
+        }
+    }
+
+//    function replace_num_tags($line){
+//
+//    }
 
     function get_date_string($date){
         $str = (string)$date;

@@ -52,9 +52,17 @@ div.main{
     width: 70%;
 }
 
+div.article{
+    width: 98%;
+}
+
 div.side{
     width: 30%;
     background-color: #222222;
+}
+
+div.side h2{
+    margin: 10px 20px;
 }
 
 div.date{
