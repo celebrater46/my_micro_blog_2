@@ -1,2 +1,6 @@
-Max:5
-Fold:true
+max:2
+fold:false
+comment:false
+comment_permit:false
+new_comments:5
+new_articles:5

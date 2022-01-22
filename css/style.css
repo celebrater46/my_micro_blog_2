@@ -61,6 +61,10 @@ div.side{
     background-color: #222222;
 }
 
+div.side > div{
+    margin: 10px auto 40px;
+}
+
 div.side h2{
     margin: 10px 20px;
 }
@@ -85,23 +89,23 @@ span {
 }
 
 span.f1{
-    font-size: 0.4em;
+    font-size: 0.2em;
 }
 
 span.f2{
-    font-size: 0.6em;
+    font-size: 0.4em;
 }
 
 span.f3{
-    font-size: 0.8em;
+    font-size: 0.6em;
 }
 
 span.f4{
-    font-size: 1em;
+    font-size: 0.8em;
 }
 
 span.f5{
-    font-size: 1.5em;
+    font-size: 1em;
 }
 
 span.f6{
@@ -110,4 +114,12 @@ span.f6{
 
 span.f7{
     font-size: 3em;
+}
+
+span.f8{
+    font-size: 5em;
+}
+
+span.f9{
+    font-size: 10em;
 }

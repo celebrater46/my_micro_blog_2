@@ -61,10 +61,10 @@ class Article
         $temp_array = [];
         foreach ($array as $line){
             if(strpos($line,"<") !== false){
-//                $ptn = "/\<([1-7])\>/";
+//                $ptn = "/\<([1-9])\>/";
 //                $rp = "<span class='f$1'>";
-                $temp = preg_replace("/\<([1-7])\>/", "<span class='f$1'>", $line);
-                $temp2 = preg_replace("/\<\/[1-7]\>/", "</span>", $temp);
+                $temp = preg_replace("/\<([1-9])\>/", "<span class='f$1'>", $line);
+                $temp2 = preg_replace("/\<\/[1-9]\>/", "</span>", $temp);
                 array_push($temp_array, $temp2);
             } else {
                 array_push($temp_array, $line);
