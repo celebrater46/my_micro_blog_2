@@ -23,14 +23,6 @@ $months = [];
 $category_id = isset($_GET["category"]) ? (int)$_GET["category"] : null;
 $month_id = isset($_GET["month"]) ? (int)$_GET["month"] : null;;
 
-//if(isset($_GET["category"])){
-//    $category_id = $_GET["category"];
-//}
-//
-//if(isset($_GET["month"])){
-//    $month_id = $_GET["month"];
-//}
-
 $i = 0;
 foreach ($category_array as $name) {
     array_push($categories, new Category($i, $name, $list));
