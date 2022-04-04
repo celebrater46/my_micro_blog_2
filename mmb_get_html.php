@@ -4,7 +4,6 @@ namespace my_micro_blog;
 
 use my_micro_blog\classes\State;
 use fp_common_modules as cm;
-use function php_hp_gallery\modules\get_category_div;
 
 require_once "init.php";
 require_once "main.php";
