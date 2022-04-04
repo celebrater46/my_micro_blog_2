@@ -22,7 +22,8 @@ var_dump($list);
 $category_array = get_category_array($list); // category1, category2 ...
 $month_array = get_month_array($list); // 202102, 202103 ...
 
-$list_per_page = get_list_per_page($list, (int)$setting[0]); // max:
+//$list_per_page = get_list_per_page($list, (int)$setting[0]); // max:
+$list_per_page = get_list_per_page($list, MMB_MAX_ARTICLES_PER_PAGE); // max:
 
 $categories = [];
 $months = [];
