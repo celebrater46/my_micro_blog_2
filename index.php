@@ -9,124 +9,31 @@ use my_micro_blog\classes\Category;
 use my_micro_blog\classes\Month;
 
 require_once "init.php";
+require_once "main.php";
 require_once "classes/Article.php";
 require_once "classes/Category.php";
 require_once "classes/Month.php";
 
-$setting = get_setting(); // "5", "false", "false" ...
+//$setting = get_setting(); // "5", "false", "false" ...
 $list = get_list(); // 220101|これはタイトルです|カテゴリ1|カテゴリ2, 220103|テストタイトルです|カテゴリ3|カテゴリ2...
-$articles = [];
+$articles = get_articles($list);
 
 var_dump($list);
 
-$category_array = get_category_array($list); // category1, category2 ...
-$month_array = get_month_array($list); // 202102, 202103 ...
+//$category_array = get_category_array($list); // category1, category2 ...
 
 //$list_per_page = get_list_per_page($list, (int)$setting[0]); // max:
-$list_per_page = get_list_per_page($list, MMB_MAX_ARTICLES_PER_PAGE); // max:
 
-$categories = [];
-$months = [];
+
+$categories = get_categories($list);
+$months = get_months($list);
 
 $category_id = isset($_GET["category"]) ? (int)$_GET["category"] : null;
 $month_id = isset($_GET["month"]) ? (int)$_GET["month"] : null;;
 
-$i = 0;
-foreach ($category_array as $name) {
-    array_push($categories, new Category($i, $name, $list));
-    $i++;
-}
-
-$j = 0;
-foreach ($month_array as $month) {
-    array_push($months, new Month($j, $month, $list));
-    $j++;
-}
-
-foreach ($list_per_page as $line){
-    array_push($articles, new Article($line));
-}
 
 // "5", "false", "false" ...
-function get_setting(){
-    if(file_exists("setting.txt")){
-        /*
-            max:5
-            fold:false
-            comment:false
-            comment_permit:false
-            new_comments:5
-            new_articles:5
-        */
-        $list = file("setting.txt");
-        $list = str_replace([
-            "max:",
-            "fold:",
-            "comment:",
-            "comment_permit:",
-            "new_comments:",
-            "new_articles:",
-            " ",
-            "\n",
-            "\r",
-            "\r\n"
-        ], "", $list);
-        return $list;
-    } else {
-        return null;
-    }
-}
 
-function get_list(){
-    if(file_exists("list.txt")){
-        return file("list.txt");
-    } else {
-        return ["ERROR: list.txt が存在しないか、読み込めません。"];
-    }
-}
-
-function get_list_per_page($list, $max){
-    $temp_array = [];
-    if((int)$max > 0){
-        for($i = 0; $i < $max; $i++){
-            array_push($temp_array, $list[$i]);
-        }
-        return $temp_array;
-    } else {
-        return $list;
-    }
-}
-
-// 202101, 202102 ...
-function get_month_array($list){
-    $array = [];
-    foreach ($list as $line){
-        $temp = explode("|", $line);
-        $temp2 = substr($temp[0], 0, 6); // 202102
-        array_push($array, (int)$temp2);
-    }
-    return array_unique($array);
-}
-
-// category1, category2 ...
-function get_category_array($list)
-{
-    $array = [];
-    foreach ($list as $line) {
-        $temp = explode("|", $line);
-        if (isset($temp[2])) {
-            array_push($array, $temp[2]);
-        }
-        if (isset($temp[3])) {
-            array_push($array, $temp[3]);
-        }
-    }
-    return array_unique($array);
-}
-
-function h($s) {
-    return htmlspecialchars($s, ENT_QUOTES, "UTF-8");
-}
 
 ?>
 <!DOCTYPE html>
