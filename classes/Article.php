@@ -9,7 +9,7 @@ class Article
     public $title;
     public $category1 = "未分類";
     public $category2 = "未分類";
-    public $text = [];
+    public $lines = [];
 
     function __construct($line){ // $line == 220103|タイトル|カテゴリ1|カテゴリ2
         if(strpos($line,'|') !== false){
@@ -28,14 +28,14 @@ class Article
             if(count($temp2) > 3) {
                 $this->category2 = $temp[3];
             }
-            $this->text = $this->get_text();
+            $this->lines = $this->get_lines();
 
         } else {
             $this->title = "ERROR: 記事情報が存在しないか、書き方を間違えています。";
         }
     }
 
-    function get_text(){
+    function get_lines(){
         $temp = [];
         if(file_exists("articles/" . (string)$this->date . ".txt")){
             $temp2 = file("articles/" . (string)$this->date . ".txt");

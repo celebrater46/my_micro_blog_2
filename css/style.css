@@ -44,11 +44,11 @@ div.description{
     margin: 0 auto 50px;
 }
 
-div.flex{
+div.mmb_splitter{
     display: flex;
 }
 
-div.main{
+div.mmb_main{
     width: 70%;
 }
 
