@@ -1,5 +1,7 @@
 <?php
 
+namespace my_micro_blog\classes;
+
 class Category
 {
     public $id;

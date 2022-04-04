@@ -2,9 +2,16 @@
 
 // Copyright (C) Enin Fujimi All Rights Reserved.
 
-require_once "Article.php";
-require_once "Category.php";
-require_once "Month.php";
+namespace my_micro_blog;
+
+use my_micro_blog\classes\Article;
+use my_micro_blog\classes\Category;
+use my_micro_blog\classes\Month;
+
+require_once "init.php";
+require_once "classes/Article.php";
+require_once "classes/Category.php";
+require_once "classes/Month.php";
 
 $setting = get_setting(); // "5", "false", "false" ...
 $list = get_list(); // 220101|これはタイトルです|カテゴリ1|カテゴリ2, 220103|テストタイトルです|カテゴリ3|カテゴリ2...

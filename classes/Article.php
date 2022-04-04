@@ -1,5 +1,7 @@
 <?php
 
+namespace my_micro_blog\classes;
+
 class Article
 {
     public $date = 10000101; // 20220103
