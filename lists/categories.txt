@@ -1,0 +1,6 @@
+カテゴリ1|category1|0
+カテゴリ2|category2|0
+カテゴリ3|category3|0
+カテゴリ4|category4|0
+カテゴリ5|category5|0
+カテゴリ6|category6|0

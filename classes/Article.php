@@ -4,6 +4,7 @@ namespace my_micro_blog\classes;
 
 use const my_micro_blog\MMB_IMG;
 use const my_micro_blog\MMB_IMG_HTTP;
+use const my_micro_blog\MMB_PATH;
 
 class Article
 {
@@ -18,23 +19,22 @@ class Article
     function __construct($line){ // $line == 220103|タイトル|カテゴリ1|カテゴリ2
         if(strpos($line,'|') !== false){
             $temp = explode("|", $line); // 220103, "タイトル", "カテゴリ1", "カテゴリ2"
-            $temp2 = [];
+            $array = [];
             foreach ($temp as $item){
 //                $temp2 = str_replace([" ", "　", "\n", "\r", "\r\n"], "", $item); // 悪魔のバグ要因、全角＆半角スペース、改行コードの排除
-                array_push($temp2, str_replace([" ", "　", "\n", "\r", "\r\n"], "", $item)); // 悪魔のバグ要因、全角＆半角スペース、改行コードの排除
+                array_push($array, str_replace([" ", "　", "\n", "\r", "\r\n"], "", $item)); // 悪魔のバグ要因、全角＆半角スペース、改行コードの排除
             }
-            $this->date = (int)$temp[0];
-            $this->date_string = $this->get_date_string($temp[0]);
-            $this->title = $temp[1];
-            if(count($temp2) > 2) {
-                $this->category1 = $temp[2];
+            $this->date = (int)$temp[2];
+            $this->date_string = $this->get_date_string($temp[2]);
+            $this->title = $temp[3];
+            if(count($array) > 2) {
+                $this->category1 = $this->get_category((int)$temp[0]);
             }
-            if(count($temp2) > 3) {
-                $this->category2 = $temp[3];
+            if(count($array) > 3) {
+                $this->category2 = $this->get_category((int)$temp[1]);
             }
             $this->imgs = $this->get_imgs();
             $this->lines = $this->get_lines();
-
         } else {
             $this->title = "ERROR: 記事情報が存在しないか、書き方を間違えています。";
         }
@@ -42,8 +42,9 @@ class Article
 
     function get_lines(){
 //        $temp = [];
-        if(file_exists("articles/" . (string)$this->date . ".txt")){
-            $temp2 = file("articles/" . (string)$this->date . ".txt");
+        $text = MMB_PATH . "articles/" . (string)$this->date . ".txt";
+        if(file_exists($text)){
+            $temp2 = file($text);
             $temp3 = $this->convert_num_tags($temp2);
             $temp4 = $this->convert_img_tags($temp3);
             return $this->convert_blank_to_space($temp4);
@@ -66,6 +67,23 @@ class Article
         return $array;
     }
 
+    function get_category($num){
+        $list = MMB_PATH . "lists/categories.txt";
+        if(file_exists($list)){
+            $lines = file($list);
+            if(isset($lines[$num])){
+                $temp = explode("|", $lines[$num]);
+                return $temp[0];
+            } else {
+                echo "var lines[" . $num . "] の値が存在しません。" . "<br>";
+                return null;
+            }
+        } else {
+            echo "ファイル「" . $list . "」が存在しないか、読み込めません。" . "<br>";
+            return null;
+        }
+    }
+
     function convert_blank_to_space($lines){
         $temp_array = [];
         foreach ($lines as $line){
@@ -83,10 +101,11 @@ class Article
         foreach ($lines as $line){
             if(strpos($line,"<img") !== false){
                 $num = preg_replace('/\<img([1-9]+) ?\/\>/', "$1", $line);
+                $num = (int)$num - 1;
                 var_dump($this->imgs);
                 $temp = preg_replace(
                     '/\<img([1-9]+) ?\/\>/',
-                    "<img class='mmb_img' src='" . $this->imgs[(int)$num - 1] . "'>",
+                    "<a target='_blank' href='" . $this->imgs[$num] . "'><img class='mmb_img' src='" . $this->imgs[$num] . "'></a>",
                     $line
                 );
                 array_push($temp_array, $temp);

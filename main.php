@@ -11,15 +11,39 @@ require_once "classes/Article.php";
 require_once "classes/Category.php";
 require_once "classes/Month.php";
 
-function get_categories($list){
-    $category_array = get_category_array($list); // category1, category2 ...
+//function get_categories($list){
+//    $category_array = get_category_array($list); // category1, category2 ...
+//    $new_array = [];
+//    $i = 0;
+//    foreach ($category_array as $name) {
+//        array_push($new_array, new Category($i, $name, $list));
+//        $i++;
+//    }
+//    return $new_array;
+//}
+
+function get_categories(){
+    $list = get_categories_list();
     $new_array = [];
     $i = 0;
-    foreach ($category_array as $name) {
-        array_push($new_array, new Category($i, $name, $list));
+    foreach ($list as $line) {
+        $temp = explode("|", $line);
+        array_push($new_array, new Category($i, $temp[0]));
         $i++;
     }
     return $new_array;
+}
+
+function get_categories2(){
+    $categories = get_categories_list();
+    $array = [];
+    foreach ($categories as $line) {
+        $temp = explode("|", $line);
+//        $num1 = (int)$temp[0];
+        array_push($array, $temp[0]);
+    }
+//    return array_unique($array);
+    return $array;
 }
 
 function get_months($list){
@@ -72,11 +96,21 @@ function get_setting(){
     }
 }
 
-function get_list(){
-    if(file_exists("list.txt")){
-        return file("list.txt");
+function get_categories_list(){
+    if(file_exists(MMB_PATH . "lists/categories.txt")){
+        return file(MMB_PATH . "lists/categories.txt");
     } else {
-        return ["ERROR: list.txt が存在しないか、読み込めません。"];
+        echo "ERROR: categories.txt が存在しないか、読み込めません。";
+        return null;
+    }
+}
+
+function get_articles_list(){
+    if(file_exists(MMB_PATH . "lists/articles.txt")){
+        return file(MMB_PATH . "lists/articles.txt");
+    } else {
+        echo "ERROR: articles.txt が存在しないか、読み込めません。";
+        return null;
     }
 }
 
@@ -97,27 +131,32 @@ function get_month_array($list){
     $array = [];
     foreach ($list as $line){
         $temp = explode("|", $line);
-        $temp2 = substr($temp[0], 0, 6); // 202102
+        $temp2 = substr($temp[2], 0, 6); // 202102
         array_push($array, (int)$temp2);
     }
     return array_unique($array);
 }
 
 // category1, category2 ...
-function get_category_array($list)
-{
-    $array = [];
-    foreach ($list as $line) {
-        $temp = explode("|", $line);
-        if (isset($temp[2])) {
-            array_push($array, $temp[2]);
-        }
-        if (isset($temp[3])) {
-            array_push($array, $temp[3]);
-        }
-    }
-    return array_unique($array);
-}
+//function get_category_array($articles){
+//    $categories = get_categories_list();
+//    $array = [];
+//    foreach ($articles as $line) {
+//        $temp = explode("|", $line);
+//        $num1 = (int)$temp[0];
+//        $num2 = (int)$temp[1];
+//        if (isset($categories[$num1])) {
+//            $category_name = explode("|", $categories[$num1]);
+//            array_push($array, $category_name[0]);
+//        }
+//        if (isset($categories[$num2])) {
+//            $category_name = explode("|", $categories[$num2]);
+//            array_push($array, $category_name[0]);
+//        }
+//    }
+////    return array_unique($array);
+//    return $array;
+//}
 
 function h($s) {
     return htmlspecialchars($s, ENT_QUOTES, "UTF-8");

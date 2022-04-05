@@ -10,11 +10,11 @@ class Old_Categories
 
     function __construct()
     {
-        if (file_exists("list.txt")) {
-            $list = file("list.txt");
+        if (file_exists("articles.txt")) {
+            $list = file("articles.txt");
             $this->categories = $this->get_category_array($list);
         } else {
-            $this->error = "ERROR: 記事リスト（list.txt）が存在しないか、書き方を間違えています。";
+            $this->error = "ERROR: 記事リスト（articles.txt）が存在しないか、書き方を間違えています。";
         }
     }
 

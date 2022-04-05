@@ -91,9 +91,9 @@ function get_head_html(){
 }
 
 function mmb_get_html(){
-    $list = get_list(); // 220101|これはタイトルです|カテゴリ1|カテゴリ2, 220103|テストタイトルです|カテゴリ3|カテゴリ2...
+    $list = get_articles_list(); // 220101|これはタイトルです|カテゴリ1|カテゴリ2, 220103|テストタイトルです|カテゴリ3|カテゴリ2...
     $articles = get_articles($list);
-    $categories = get_categories($list);
+    $categories = get_categories();
     $months = get_months($list);
     $state = new State();
     $html = get_head_html();
