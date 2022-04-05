@@ -34,23 +34,25 @@ class Article
                 $this->category2 = $this->get_category((int)$temp[1]);
             }
             $this->imgs = $this->get_imgs();
-            $this->lines = $this->get_lines();
+//            $this->lines = $this->get_lines();
         } else {
             $this->title = "ERROR: 記事情報が存在しないか、書き方を間違えています。";
         }
     }
 
     function get_lines(){
+//        echo "Hello World!!!!!!!";
 //        $temp = [];
         $text = MMB_PATH . "articles/" . (string)$this->date . ".txt";
         if(file_exists($text)){
             $temp2 = file($text);
             $temp3 = $this->convert_num_tags($temp2);
             $temp4 = $this->convert_img_tags($temp3);
-            return $this->convert_blank_to_space($temp4);
+            $this->lines = $this->convert_blank_to_space($temp4);
+//            return $this->convert_blank_to_space($temp4);
         } else {
             echo "記事ファイル「" . $this->date . ".txt」が存在しないか、読み込めません。" . "<br>";
-            return null;
+//            return null;
         }
     }
 

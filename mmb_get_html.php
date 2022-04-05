@@ -46,6 +46,7 @@ function get_category_ul($categories, $state){
 function get_articles_html($articles){
     $html = "";
     foreach ($articles as $article){
+        $article->get_lines();
         $html .= cm\space_br('<div class="mmb_article">', 3);
         $html .= cm\space_br('<hr>', 4);
         $html .= cm\space_br('<div class="mmb_date">', 4);
