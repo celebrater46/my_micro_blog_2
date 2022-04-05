@@ -16,8 +16,12 @@ function get_archives_ul($months, $state){
     $html .= cm\space_br('<h2>' . "月別記事" . '</h2>', 4);
     $html .= cm\space_br('<ul>', 4);
     foreach ($months as $month){
+        $parameters = [
+            "mmb_category" => -1,
+            "mmb_month" => $month->id
+        ];
         $html .= cm\space_br('<li>', 5);
-        $html .= cm\space_br('<a href="' . MMB_INDEX . '?' . $state->get_new_url_parameters(["mmb_month" => $month->id], "") . '">', 6);
+        $html .= cm\space_br('<a href="' . MMB_INDEX . '?' . $state->get_new_url_parameters($parameters, "") . '">', 6);
         $html .= cm\space_br($month->month_string, 7);
         $html .= cm\space_br('</a>', 6);
         $html .= cm\space_br('</li>', 5);
@@ -32,8 +36,12 @@ function get_category_ul($categories, $state){
     $html .= cm\space_br('<h2>' . "カテゴリ" . '</h2>', 4);
     $html .= cm\space_br('<ul>', 4);
     foreach ($categories as $category){
+        $parameters = [
+            "mmb_category" => $category->id,
+            "mmb_month" => -1
+        ];
         $html .= cm\space_br('<li>', 5);
-        $html .= cm\space_br('<a href="' . MMB_INDEX . '?' . $state->get_new_url_parameters(["mmb_category" => $category->id], "") . '">', 6);
+        $html .= cm\space_br('<a href="' . MMB_INDEX . '?' . $state->get_new_url_parameters($parameters, "") . '">', 6);
         $html .= cm\space_br($category->name, 7);
         $html .= cm\space_br('</a>', 6);
         $html .= cm\space_br('</li>', 5);
@@ -94,11 +102,12 @@ function get_head_html(){
 
 function mmb_get_html(){
     $state = new State();
-    $list = get_articles_list($state); // 220101|これはタイトルです|カテゴリ1|カテゴリ2, 220103|テストタイトルです|カテゴリ3|カテゴリ2...
+    $list = get_articles_list(); // 220101|これはタイトルです|カテゴリ1|カテゴリ2, 220103|テストタイトルです|カテゴリ3|カテゴリ2...
 //    var_dump($list);
-    $articles = get_articles($list);
     $categories = get_categories($state, $list);
     $months = get_months($list);
+    $extracted = extract_articles_list($list, $state, $months);
+    $articles = get_articles($extracted);
     $html = get_head_html();
     $html .= get_splitter_div($articles, $categories, $months, $state);
     return $html;

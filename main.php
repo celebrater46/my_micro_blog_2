@@ -105,25 +105,40 @@ function get_categories_list(){
     }
 }
 
-function get_articles_list($state){
+function extract_articles_list($list, $state, $months){
+    if($state->mmb_category > -1){
+        $array = [];
+        foreach ($list as $line){
+            $temp = explode("|", $line);
+//                var_dump($temp);
+            if((int)$temp[0] === $state->mmb_category
+                || (int)$temp[1] === $state->mmb_category)
+            {
+                array_push($array, $line);
+            }
+        }
+//            var_dump($array);
+        return $array;
+    } else if($state->mmb_month > -1){
+        $array = [];
+        foreach ($list as $line){
+            $temp = explode("|", $line);
+            $date_num = substr($temp[2], 0, 6); // 202112
+//            var_dump($months[$state->mmb_month]->month);
+            if($months[$state->mmb_month]->month === (int)$date_num){
+                array_push($array, $line);
+            }
+        }
+        return $array;
+    } else {
+        return $list;
+    }
+}
+
+function get_articles_list(){
     if(file_exists(MMB_PATH . "lists/articles.txt")){
         $lines = file(MMB_PATH . "lists/articles.txt");
-        if($state->mmb_category > -1){
-            $array = [];
-            foreach ($lines as $line){
-                $temp = explode("|", $line);
-//                var_dump($temp);
-                if((int)$temp[0] === $state->mmb_category
-                || (int)$temp[1] === $state->mmb_category)
-                {
-                    array_push($array, $line);
-                }
-            }
-//            var_dump($array);
-            return $array;
-        } else {
-            return $lines;
-        }
+        return $lines;
     } else {
         echo "ERROR: articles.txt が存在しないか、読み込めません。";
         return null;
