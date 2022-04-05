@@ -106,7 +106,7 @@ function get_categories_list(){
 }
 
 function extract_articles_list($list, $state, $months){
-    if($state->mmb_category > -1){
+    if($state->mmb_category !== null){
         $array = [];
         foreach ($list as $line){
             $temp = explode("|", $line);
@@ -119,7 +119,7 @@ function extract_articles_list($list, $state, $months){
         }
 //            var_dump($array);
         return $array;
-    } else if($state->mmb_month > -1){
+    } else if($state->mmb_month !== null){
         $array = [];
         foreach ($list as $line){
             $temp = explode("|", $line);
@@ -130,6 +130,15 @@ function extract_articles_list($list, $state, $months){
             }
         }
         return $array;
+    } else if($state->mmb_day !== null){
+        foreach ($list as $line){
+            $temp = explode("|", $line);
+            if($state->mmb_day === (int)$temp[2]){
+                return [$line];
+            }
+        }
+        echo $state->mmb_day . ".txt が見つからないか、読み込めません。" . "<br>";
+        return null;
     } else {
         return $list;
     }

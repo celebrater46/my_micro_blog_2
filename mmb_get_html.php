@@ -17,8 +17,9 @@ function get_archives_ul($months, $state){
     $html .= cm\space_br('<ul>', 4);
     foreach ($months as $month){
         $parameters = [
-            "mmb_category" => -1,
-            "mmb_month" => $month->id
+            "mmb_category" => null,
+            "mmb_month" => $month->id,
+            "mmb_day" => null
         ];
         $html .= cm\space_br('<li>', 5);
         $html .= cm\space_br('<a href="' . MMB_INDEX . '?' . $state->get_new_url_parameters($parameters, "") . '">', 6);
@@ -38,7 +39,8 @@ function get_category_ul($categories, $state){
     foreach ($categories as $category){
         $parameters = [
             "mmb_category" => $category->id,
-            "mmb_month" => -1
+            "mmb_month" => null,
+            "mmb_day" => null
         ];
         $html .= cm\space_br('<li>', 5);
         $html .= cm\space_br('<a href="' . MMB_INDEX . '?' . $state->get_new_url_parameters($parameters, "") . '">', 6);
@@ -51,9 +53,14 @@ function get_category_ul($categories, $state){
     return $html;
 }
 
-function get_articles_html($articles){
+function get_articles_html($articles, $state){
     $html = "";
     foreach ($articles as $article){
+        $parameters = [
+            "mmb_category" => null,
+            "mmb_month" => null,
+            "mmb_day" => $article->date
+        ];
         $article->get_lines();
         $html .= cm\space_br('<div class="mmb_article">', 3);
         $html .= cm\space_br('<hr>', 4);
@@ -62,7 +69,9 @@ function get_articles_html($articles){
         $html .= cm\space_br($article->category1 . "　|　", 5);
         $html .= cm\space_br($article->category2, 5);
         $html .= cm\space_br('</div>', 4);
-        $html .= cm\space_br('<h2>' . $article->title . '</h2>', 4);
+        $html .= cm\space_br('<h2>', 4);
+        $html .= cm\space_br('<a href="' . MMB_INDEX . '?' . $state->get_new_url_parameters($parameters, "") . '">' . $article->title . '</a>', 5);
+        $html .= cm\space_br('</h2>', 4);
         $html .= cm\space_br('<div class="mmb_text">', 4);
         foreach ($article->lines as $line){
             $html .= cm\space_br('<p>' . $line . '</p>', 5);
@@ -82,7 +91,7 @@ function get_splitter_div($articles, $categories, $months, $state){
     } else if($state->mmb_month > -1){
         $html .= cm\space_br('<h2>' . $months[$state->mmb_month]->month_string . '</h2>', 3);
     }
-    $html .= get_articles_html($articles);
+    $html .= get_articles_html($articles, $state);
     $html .= cm\space_br('</div>', 2);
     $html .= cm\space_br('<div class="mmb_side">', 2);
     $html .= get_category_ul($categories, $state);
