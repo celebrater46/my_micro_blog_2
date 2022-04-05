@@ -8,8 +8,8 @@ class State
     public $mmb_month;
 
     function __construct(){
-        $this->mmb_category = isset($_GET["mmb_category"]) ? (int)$_GET["mmb_category"] : 0;
-        $this->mmb_month = isset($_GET["mmb_month"]) ? (int)$_GET["mmb_month"] : 0;
+        $this->mmb_category = isset($_GET["mmb_category"]) ? (int)$_GET["mmb_category"] : -1;
+        $this->mmb_month = isset($_GET["mmb_month"]) ? (int)$_GET["mmb_month"] : -1;
     }
 
     // $array = ["hoge" => 1, "fuga" => 2 ... ]

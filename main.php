@@ -22,13 +22,13 @@ require_once "classes/Month.php";
 //    return $new_array;
 //}
 
-function get_categories(){
+function get_categories($state, $article_list){
     $list = get_categories_list();
     $new_array = [];
-    $i = 1;
+    $i = 0;
     foreach ($list as $line) {
         $temp = explode("|", $line);
-        array_push($new_array, new Category($i, $temp[0]));
+        array_push($new_array, new Category($i, $temp[0], $state, $article_list));
         $i++;
     }
     return $new_array;
@@ -49,7 +49,7 @@ function get_categories(){
 function get_months($list){
     $month_array = get_month_array($list); // 202102, 202103 ...
     $new_array = [];
-    $j = 1;
+    $j = 0;
     foreach ($month_array as $month) {
         array_push($new_array, new Month($j, $month, $list));
         $j++;
@@ -105,9 +105,25 @@ function get_categories_list(){
     }
 }
 
-function get_articles_list(){
+function get_articles_list($state){
     if(file_exists(MMB_PATH . "lists/articles.txt")){
-        return file(MMB_PATH . "lists/articles.txt");
+        $lines = file(MMB_PATH . "lists/articles.txt");
+        if($state->mmb_category > -1){
+            $array = [];
+            foreach ($lines as $line){
+                $temp = explode("|", $line);
+//                var_dump($temp);
+                if((int)$temp[0] === $state->mmb_category
+                || (int)$temp[1] === $state->mmb_category)
+                {
+                    array_push($array, $line);
+                }
+            }
+//            var_dump($array);
+            return $array;
+        } else {
+            return $lines;
+        }
     } else {
         echo "ERROR: articles.txt が存在しないか、読み込めません。";
         return null;
@@ -118,7 +134,11 @@ function get_list_per_page($list, $max){
     $temp_array = [];
     if((int)$max > 0){
         for($i = 0; $i < $max; $i++){
-            array_push($temp_array, $list[$i]);
+            if(isset($list[$i])){
+                array_push($temp_array, $list[$i]);
+            } else {
+                break;
+            }
         }
         return $temp_array;
     } else {

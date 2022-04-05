@@ -104,7 +104,7 @@ class Article
             if(strpos($line,"<img") !== false){
                 $num = preg_replace('/\<img([1-9]+) ?\/\>/', "$1", $line);
                 $num = (int)$num - 1;
-                var_dump($this->imgs);
+//                var_dump($this->imgs);
                 $temp = preg_replace(
                     '/\<img([1-9]+) ?\/\>/',
                     "<a target='_blank' href='" . $this->imgs[$num] . "'><img class='mmb_img' src='" . $this->imgs[$num] . "'></a>",

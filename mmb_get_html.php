@@ -13,7 +13,7 @@ require_once MMB_HCM_PATH;
 function get_archives_ul($months, $state){
     $html = cm\space_br('<div>', 3);
     $html .= cm\space_br('<hr>', 4);
-    $html .= cm\space_br('<h2>' . "カテゴリ" . '</h2>', 4);
+    $html .= cm\space_br('<h2>' . "月別記事" . '</h2>', 4);
     $html .= cm\space_br('<ul>', 4);
     foreach ($months as $month){
         $html .= cm\space_br('<li>', 5);
@@ -66,11 +66,12 @@ function get_articles_html($articles){
 }
 
 function get_splitter_div($articles, $categories, $months, $state){
+//    var_dump($articles);
     $html = cm\space_br('<div class="mmb_splitter">', 1);
     $html .= cm\space_br('<div class="mmb_main">', 2);
-    if($state->mmb_category > 0){
+    if($state->mmb_category > -1){
         $html .= cm\space_br('<h2>' . $categories[$state->mmb_category]->name . '</h2>', 3);
-    } else if($state->mmb_month > 0){
+    } else if($state->mmb_month > -1){
         $html .= cm\space_br('<h2>' . $months[$state->mmb_month]->month_string . '</h2>', 3);
     }
     $html .= get_articles_html($articles);
@@ -92,11 +93,12 @@ function get_head_html(){
 }
 
 function mmb_get_html(){
-    $list = get_articles_list(); // 220101|これはタイトルです|カテゴリ1|カテゴリ2, 220103|テストタイトルです|カテゴリ3|カテゴリ2...
-    $articles = get_articles($list);
-    $categories = get_categories();
-    $months = get_months($list);
     $state = new State();
+    $list = get_articles_list($state); // 220101|これはタイトルです|カテゴリ1|カテゴリ2, 220103|テストタイトルです|カテゴリ3|カテゴリ2...
+//    var_dump($list);
+    $articles = get_articles($list);
+    $categories = get_categories($state, $list);
+    $months = get_months($list);
     $html = get_head_html();
     $html .= get_splitter_div($articles, $categories, $months, $state);
     return $html;
