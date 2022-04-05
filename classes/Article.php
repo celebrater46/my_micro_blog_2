@@ -2,6 +2,8 @@
 
 namespace my_micro_blog\classes;
 
+use const my_micro_blog\MMB_IMG;
+
 class Article
 {
     public $date = 10000101; // 20220103
@@ -9,6 +11,7 @@ class Article
     public $title;
     public $category1 = "未分類";
     public $category2 = "未分類";
+    public $imgs = [];
     public $lines = [];
 
     function __construct($line){ // $line == 220103|タイトル|カテゴリ1|カテゴリ2
@@ -28,6 +31,7 @@ class Article
             if(count($temp2) > 3) {
                 $this->category2 = $temp[3];
             }
+            $this->imgs = $this->get_imgs();
             $this->lines = $this->get_lines();
 
         } else {
@@ -36,20 +40,25 @@ class Article
     }
 
     function get_lines(){
-        $temp = [];
+//        $temp = [];
         if(file_exists("articles/" . (string)$this->date . ".txt")){
             $temp2 = file("articles/" . (string)$this->date . ".txt");
             $temp3 = $this->convert_num_tags($temp2);
-            return $this->convert_blank_to_space($temp3);
+            $temp4 = $this->convert_img_tags($temp3);
+            return $this->convert_blank_to_space($temp4);
         } else {
-            $temp = ["記事ファイル「" . $this->date . ".txt」が存在しないか、読み込めません。"];
-            return $temp;
+            echo "記事ファイル「" . $this->date . ".txt」が存在しないか、読み込めません。" . "<br>";
+            return null;
         }
     }
 
-    function convert_blank_to_space($array){
+    function get_imgs(){
+        return glob(MMB_IMG . '/*');
+    }
+
+    function convert_blank_to_space($lines){
         $temp_array = [];
-        foreach ($array as $line){
+        foreach ($lines as $line){
             if($line === "" || $line === "\n" || $line === "\r" || $line === "\r\n") {
                 array_push($temp_array, "　");
             } else {
@@ -59,9 +68,24 @@ class Article
         return $temp_array;
     }
 
-    function convert_num_tags($array){
+    function convert_img_tags($lines){
         $temp_array = [];
-        foreach ($array as $line){
+        $i = 0;
+        foreach ($lines as $line){
+            if(strpos($line,"<img") !== false){
+                $temp = preg_replace('/\<img([1-9]+) \/\>/g', "<img class='mmb_img' src='" . MMB_IMG . $this->date . $this->imgs[$i] . "'>", $line);
+                array_push($temp_array, $temp);
+                $i++;
+            } else {
+                array_push($temp_array, $line);
+            }
+        }
+        return $temp_array;
+    }
+
+    function convert_num_tags($lines){
+        $temp_array = [];
+        foreach ($lines as $line){
             if(strpos($line,"<") !== false){
 //                $ptn = "/\<([1-9])\>/";
 //                $rp = "<span class='f$1'>";
