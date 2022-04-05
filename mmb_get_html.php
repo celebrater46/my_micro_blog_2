@@ -17,7 +17,7 @@ function get_archives_ul($months, $state){
     $html .= cm\space_br('<ul>', 4);
     foreach ($months as $month){
         $html .= cm\space_br('<li>', 5);
-        $html .= cm\space_br('<a href="' . MMB_INDEX . '?' . $state->get_url_parameters() . '">', 6);
+        $html .= cm\space_br('<a href="' . MMB_INDEX . '?' . $state->get_new_url_parameters(["mmb_month" => $month->id], "") . '">', 6);
         $html .= cm\space_br($month->month_string, 7);
         $html .= cm\space_br('</a>', 6);
         $html .= cm\space_br('</li>', 5);
@@ -33,7 +33,7 @@ function get_category_ul($categories, $state){
     $html .= cm\space_br('<ul>', 4);
     foreach ($categories as $category){
         $html .= cm\space_br('<li>', 5);
-        $html .= cm\space_br('<a href="' . MMB_INDEX . '?' . $state->get_url_parameters() . '">', 6);
+        $html .= cm\space_br('<a href="' . MMB_INDEX . '?' . $state->get_new_url_parameters(["mmb_category" => $category->id], "") . '">', 6);
         $html .= cm\space_br($category->name, 7);
         $html .= cm\space_br('</a>', 6);
         $html .= cm\space_br('</li>', 5);

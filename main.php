@@ -25,7 +25,7 @@ require_once "classes/Month.php";
 function get_categories(){
     $list = get_categories_list();
     $new_array = [];
-    $i = 0;
+    $i = 1;
     foreach ($list as $line) {
         $temp = explode("|", $line);
         array_push($new_array, new Category($i, $temp[0]));
@@ -34,22 +34,22 @@ function get_categories(){
     return $new_array;
 }
 
-function get_categories2(){
-    $categories = get_categories_list();
-    $array = [];
-    foreach ($categories as $line) {
-        $temp = explode("|", $line);
-//        $num1 = (int)$temp[0];
-        array_push($array, $temp[0]);
-    }
-//    return array_unique($array);
-    return $array;
-}
+//function get_categories2(){
+//    $categories = get_categories_list();
+//    $array = [];
+//    foreach ($categories as $line) {
+//        $temp = explode("|", $line);
+////        $num1 = (int)$temp[0];
+//        array_push($array, $temp[0]);
+//    }
+////    return array_unique($array);
+//    return $array;
+//}
 
 function get_months($list){
     $month_array = get_month_array($list); // 202102, 202103 ...
     $new_array = [];
-    $j = 0;
+    $j = 1;
     foreach ($month_array as $month) {
         array_push($new_array, new Month($j, $month, $list));
         $j++;

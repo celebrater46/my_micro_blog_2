@@ -12,7 +12,19 @@ class State
         $this->mmb_month = isset($_GET["mmb_month"]) ? (int)$_GET["mmb_month"] : 0;
     }
 
-    function get_url_parameters(){
-        return "mmb_category=" . $this->mmb_category . "&mmb_month=" . $this->mmb_month;
+    // $array = ["hoge" => 1, "fuga" => 2 ... ]
+    function get_new_url_parameters($array, $additional){
+        $parameters = [
+            "mmb_category" => $this->mmb_category,
+            "mmb_month" => $this->mmb_month
+        ];
+        foreach ($array as $key => $num){
+            $parameters[$key] = $num;
+        }
+        return "mmb_category=" . $parameters["mmb_category"]. "&mmb_month=" . $parameters["mmb_month"]. $additional;
+    }
+
+    function get_url_parameters($additional){
+        return "mmb_category=" . $this->mmb_category . "&mmb_month=" . $this->mmb_month . $additional;
     }
 }
