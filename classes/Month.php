@@ -11,9 +11,7 @@ class Month
     public $articles = [];
 
     function __construct($id, $month, $list){
-        // $list == "20220102|タイトル|カテゴリ1|カテゴリ2", ...
         $this->id = (int)$id;
-//        $this->month = substr($list[$this->id], 0, 6); // 202102
         $this->month = (int)$month; // 202102
         $this->month_string = $this->get_month_string($this->month);
         foreach ($list as $line){

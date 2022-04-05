@@ -28,7 +28,6 @@ class State
         $month = $parameters["mmb_month"] === null ? "" : "&mmb_month=" . $parameters["mmb_month"];
         $day = $parameters["mmb_day"] === null ? "" : "&mmb_day=" . $parameters["mmb_day"];
         return $category . $month . $day . $additional;
-//        return "mmb_category=" . $parameters["mmb_category"]. "&mmb_month=" . $parameters["mmb_month"]. $additional;
     }
 
     function get_url_parameters($additional){

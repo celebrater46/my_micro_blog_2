@@ -83,7 +83,6 @@ function get_articles_html($articles, $state){
 }
 
 function get_splitter_div($articles, $categories, $months, $state){
-//    var_dump($articles);
     $html = cm\space_br('<div class="mmb_splitter">', 1);
     $html .= cm\space_br('<div class="mmb_main">', 2);
     if($state->mmb_category > -1){
@@ -112,7 +111,6 @@ function get_head_html(){
 function mmb_get_html(){
     $state = new State();
     $list = get_articles_list(); // 220101|これはタイトルです|カテゴリ1|カテゴリ2, 220103|テストタイトルです|カテゴリ3|カテゴリ2...
-//    var_dump($list);
     $categories = get_categories($state, $list);
     $months = get_months($list);
     $extracted = extract_articles_list($list, $state, $months);

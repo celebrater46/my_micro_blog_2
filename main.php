@@ -11,17 +11,6 @@ require_once "classes/Article.php";
 require_once "classes/Category.php";
 require_once "classes/Month.php";
 
-//function get_categories($list){
-//    $category_array = get_category_array($list); // category1, category2 ...
-//    $new_array = [];
-//    $i = 0;
-//    foreach ($category_array as $name) {
-//        array_push($new_array, new Category($i, $name, $list));
-//        $i++;
-//    }
-//    return $new_array;
-//}
-
 function get_categories($state, $article_list){
     $list = get_categories_list();
     $new_array = [];
@@ -33,18 +22,6 @@ function get_categories($state, $article_list){
     }
     return $new_array;
 }
-
-//function get_categories2(){
-//    $categories = get_categories_list();
-//    $array = [];
-//    foreach ($categories as $line) {
-//        $temp = explode("|", $line);
-////        $num1 = (int)$temp[0];
-//        array_push($array, $temp[0]);
-//    }
-////    return array_unique($array);
-//    return $array;
-//}
 
 function get_months($list){
     $month_array = get_month_array($list); // 202102, 202103 ...
@@ -67,34 +44,34 @@ function get_articles($list){
 }
 
 // "5", "false", "false" ...
-function get_setting(){
-    if(file_exists("setting.txt")){
-        /*
-            max:5
-            fold:false
-            comment:false
-            comment_permit:false
-            new_comments:5
-            new_articles:5
-        */
-        $list = file("setting.txt");
-        $list = str_replace([
-            "max:",
-            "fold:",
-            "comment:",
-            "comment_permit:",
-            "new_comments:",
-            "new_articles:",
-            " ",
-            "\n",
-            "\r",
-            "\r\n"
-        ], "", $list);
-        return $list;
-    } else {
-        return null;
-    }
-}
+//function get_setting(){
+//    if(file_exists("setting.txt")){
+//        /*
+//            max:5
+//            fold:false
+//            comment:false
+//            comment_permit:false
+//            new_comments:5
+//            new_articles:5
+//        */
+//        $list = file("setting.txt");
+//        $list = str_replace([
+//            "max:",
+//            "fold:",
+//            "comment:",
+//            "comment_permit:",
+//            "new_comments:",
+//            "new_articles:",
+//            " ",
+//            "\n",
+//            "\r",
+//            "\r\n"
+//        ], "", $list);
+//        return $list;
+//    } else {
+//        return null;
+//    }
+//}
 
 function get_categories_list(){
     if(file_exists(MMB_PATH . "lists/categories.txt")){
@@ -110,21 +87,18 @@ function extract_articles_list($list, $state, $months){
         $array = [];
         foreach ($list as $line){
             $temp = explode("|", $line);
-//                var_dump($temp);
             if((int)$temp[0] === $state->mmb_category
                 || (int)$temp[1] === $state->mmb_category)
             {
                 array_push($array, $line);
             }
         }
-//            var_dump($array);
         return $array;
     } else if($state->mmb_month !== null){
         $array = [];
         foreach ($list as $line){
             $temp = explode("|", $line);
             $date_num = substr($temp[2], 0, 6); // 202112
-//            var_dump($months[$state->mmb_month]->month);
             if($months[$state->mmb_month]->month === (int)$date_num){
                 array_push($array, $line);
             }
@@ -146,8 +120,7 @@ function extract_articles_list($list, $state, $months){
 
 function get_articles_list(){
     if(file_exists(MMB_PATH . "lists/articles.txt")){
-        $lines = file(MMB_PATH . "lists/articles.txt");
-        return $lines;
+        return file(MMB_PATH . "lists/articles.txt");
     } else {
         echo "ERROR: articles.txt が存在しないか、読み込めません。";
         return null;
@@ -180,27 +153,6 @@ function get_month_array($list){
     }
     return array_unique($array);
 }
-
-// category1, category2 ...
-//function get_category_array($articles){
-//    $categories = get_categories_list();
-//    $array = [];
-//    foreach ($articles as $line) {
-//        $temp = explode("|", $line);
-//        $num1 = (int)$temp[0];
-//        $num2 = (int)$temp[1];
-//        if (isset($categories[$num1])) {
-//            $category_name = explode("|", $categories[$num1]);
-//            array_push($array, $category_name[0]);
-//        }
-//        if (isset($categories[$num2])) {
-//            $category_name = explode("|", $categories[$num2]);
-//            array_push($array, $category_name[0]);
-//        }
-//    }
-////    return array_unique($array);
-//    return $array;
-//}
 
 function h($s) {
     return htmlspecialchars($s, ENT_QUOTES, "UTF-8");

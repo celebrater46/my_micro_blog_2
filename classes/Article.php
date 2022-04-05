@@ -21,7 +21,6 @@ class Article
             $temp = explode("|", $line); // 220103, "タイトル", "カテゴリ1", "カテゴリ2"
             $array = [];
             foreach ($temp as $item){
-//                $temp2 = str_replace([" ", "　", "\n", "\r", "\r\n"], "", $item); // 悪魔のバグ要因、全角＆半角スペース、改行コードの排除
                 array_push($array, str_replace([" ", "　", "\n", "\r", "\r\n"], "", $item)); // 悪魔のバグ要因、全角＆半角スペース、改行コードの排除
             }
             $this->date = (int)$temp[2];
@@ -34,38 +33,30 @@ class Article
                 $this->category2 = $this->get_category((int)$temp[1]);
             }
             $this->imgs = $this->get_imgs();
-//            $this->lines = $this->get_lines();
         } else {
             $this->title = "ERROR: 記事情報が存在しないか、書き方を間違えています。";
         }
     }
 
     function get_lines(){
-//        echo "Hello World!!!!!!!";
-//        $temp = [];
         $text = MMB_PATH . "articles/" . (string)$this->date . ".txt";
         if(file_exists($text)){
             $temp2 = file($text);
             $temp3 = $this->convert_num_tags($temp2);
             $temp4 = $this->convert_img_tags($temp3);
             $this->lines = $this->convert_blank_to_space($temp4);
-//            return $this->convert_blank_to_space($temp4);
         } else {
             echo "記事ファイル「" . $this->date . ".txt」が存在しないか、読み込めません。" . "<br>";
-//            return null;
         }
     }
 
     function get_imgs(){
         $imgs = glob(MMB_IMG . $this->date . '/*');
-//        var_dump($imgs);
         $array = [];
         foreach ($imgs as $img){
-//            $file_name = str_replace(MMB_IMG. $this->date . "/", "", $img);
             preg_match('/\/([^\.]+)\.(png|PNG|jpg|JPG|gif|GIF)/', $img, $file_name);
             array_push($array, MMB_IMG_HTTP . $this->date . $file_name[0]);
         }
-//        var_dump($array);
         return $array;
     }
 
@@ -104,14 +95,12 @@ class Article
             if(strpos($line,"<img") !== false){
                 $num = preg_replace('/\<img([1-9]+) ?\/\>/', "$1", $line);
                 $num = (int)$num - 1;
-//                var_dump($this->imgs);
                 $temp = preg_replace(
                     '/\<img([1-9]+) ?\/\>/',
                     "<a target='_blank' href='" . $this->imgs[$num] . "'><img class='mmb_img' src='" . $this->imgs[$num] . "'></a>",
                     $line
                 );
                 array_push($temp_array, $temp);
-//                array_push($temp_array, $line);
             } else {
                 array_push($temp_array, $line);
             }
@@ -123,8 +112,6 @@ class Article
         $temp_array = [];
         foreach ($lines as $line){
             if(strpos($line,"<") !== false){
-//                $ptn = "/\<([1-9])\>/";
-//                $rp = "<span class='f$1'>";
                 $temp = preg_replace("/\<([1-9])\>/", "<span class='f$1'>", $line);
                 $temp2 = preg_replace("/\<\/[1-9]\>/", "</span>", $temp);
                 array_push($temp_array, $temp2);
@@ -134,10 +121,6 @@ class Article
         }
         return $temp_array;
     }
-
-//    function replace_num_tags($line){
-//
-//    }
 
     function get_date_string($date){
         $str = (string)$date;
