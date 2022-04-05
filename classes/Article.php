@@ -3,6 +3,7 @@
 namespace my_micro_blog\classes;
 
 use const my_micro_blog\MMB_IMG;
+use const my_micro_blog\MMB_IMG_HTTP;
 
 class Article
 {
@@ -53,7 +54,16 @@ class Article
     }
 
     function get_imgs(){
-        return glob(MMB_IMG . '/*');
+        $imgs = glob(MMB_IMG . $this->date . '/*');
+//        var_dump($imgs);
+        $array = [];
+        foreach ($imgs as $img){
+//            $file_name = str_replace(MMB_IMG. $this->date . "/", "", $img);
+            preg_match('/\/([^\.]+)\.(png|PNG|jpg|JPG|gif|GIF)/', $img, $file_name);
+            array_push($array, MMB_IMG_HTTP . $this->date . $file_name[0]);
+        }
+//        var_dump($array);
+        return $array;
     }
 
     function convert_blank_to_space($lines){
@@ -70,12 +80,17 @@ class Article
 
     function convert_img_tags($lines){
         $temp_array = [];
-        $i = 0;
         foreach ($lines as $line){
             if(strpos($line,"<img") !== false){
-                $temp = preg_replace('/\<img([1-9]+) \/\>/g', "<img class='mmb_img' src='" . MMB_IMG . $this->date . $this->imgs[$i] . "'>", $line);
+                $num = preg_replace('/\<img([1-9]+) ?\/\>/', "$1", $line);
+                var_dump($this->imgs);
+                $temp = preg_replace(
+                    '/\<img([1-9]+) ?\/\>/',
+                    "<img class='mmb_img' src='" . $this->imgs[(int)$num - 1] . "'>",
+                    $line
+                );
                 array_push($temp_array, $temp);
-                $i++;
+//                array_push($temp_array, $line);
             } else {
                 array_push($temp_array, $line);
             }

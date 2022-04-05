@@ -123,3 +123,8 @@ span.f8{
 span.f9{
     font-size: 10em;
 }
+
+img.mmb_img{
+    width: 640px;
+    height: auto;
+}
