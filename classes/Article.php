@@ -93,10 +93,10 @@ class Article
         $temp_array = [];
         foreach ($lines as $line){
             if(strpos($line,"<img") !== false){
-                $num = preg_replace('/\<img([1-9]+) ?\/\>/', "$1", $line);
+                $num = preg_replace('/\<img([0-9]+) ?\/\>/', "$1", $line);
                 $num = (int)$num - 1;
                 $temp = preg_replace(
-                    '/\<img([1-9]+) ?\/\>/',
+                    '/\<img([0-9]+) ?\/\>/',
                     "<a target='_blank' href='" . $this->imgs[$num] . "'><img class='mmb_img' src='" . $this->imgs[$num] . "'></a>",
                     $line
                 );

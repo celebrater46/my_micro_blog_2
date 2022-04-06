@@ -4,11 +4,13 @@ namespace my_micro_blog;
 
 use my_micro_blog\classes\State;
 use fp_common_modules as cm;
+use php_hp_bbs as phbbs;
 
 require_once "init.php";
 require_once "main.php";
 require_once "classes/State.php";
 require_once MMB_HCM_PATH;
+require_once MMB_PHBBS_PATH . "phbbs_get_html.php";
 
 function get_archives_ul($months, $state){
     $html = cm\space_br('<div>', 3);
@@ -78,6 +80,11 @@ function get_articles_html($articles, $state){
         }
         $html .= cm\space_br('</div>', 4);
         $html .= cm\space_br('</div>', 3);
+        if(MMB_COMMENT && $state->mmb_day !== null){
+            $html .= cm\space_br('<hr>', 3);
+            $html .= cm\space_br('<h3>コメント</h3>', 3);
+            $html .= phbbs\phbbs_get_html("mmb_" . $state->mmb_day);
+        }
     }
     return $html;
 }

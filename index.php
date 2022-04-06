@@ -15,6 +15,7 @@ require_once "mmb_get_html.php";
     <meta name="Author" content="<?php echo MMB_AUTHOR; ?>">
     <title><?php echo MMB_TITLE; ?></title>
     <link rel="stylesheet" href="css/style.css">
+    <?php echo MMB_COMMENT ? '<link rel="stylesheet" href="' . MMB_PHBBS_HTML_PATH . 'css/style.css">' : ""; ?>
 </head>
 <body>
 <div class="container">
