@@ -22,7 +22,9 @@ class Comment
         $this->article_id = (int)$temp[0];
 //        $this->date = $temp[1];
         $this->user_name = $temp[1];
-        $this->article_title = $this->get_article_title($articles_list);
+        if($articles_list !== null){
+            $this->article_title = $this->get_article_title($articles_list);
+        }
     }
 
     function get_article_title($list){

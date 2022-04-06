@@ -5,12 +5,15 @@ namespace my_micro_blog;
 use my_micro_blog\classes\State;
 use fp_common_modules as cm;
 use php_hp_bbs as phbbs;
+use php_number_link_generator\classes\NumberLink;
 
 require_once "init.php";
 require_once "main.php";
 require_once "classes/State.php";
 require_once MMB_HCM_PATH;
 require_once MMB_PHBBS_PATH . "phbbs_get_html.php";
+require_once MMB_PNLG_PATH . 'init.php';
+require_once MMB_PNLG_PATH . 'classes/NumberLink.php';
 
 function get_comment_ul($comments, $state){
     $html = cm\space_br('<div>', 3);
@@ -78,36 +81,82 @@ function get_category_ul($categories, $state){
     return $html;
 }
 
+function get_article_footer_html($article, $state){
+    $html = cm\space_br('<div class="mmb_article_footer">', 4);
+    $html .= cm\space_br('<p>', 5);
+    $parameters2 = [
+        "mmb_category" => null,
+        "mmb_month" => null,
+        "mmb_day" => null
+    ];
+    $html .= cm\space_br("カテゴリ： ", 6);
+    $parameters2["mmb_category"] = $article->category_id1;
+    $html .= cm\space_br('<a href="' . MMB_INDEX . '?' . $state->get_new_url_parameters($parameters2, "") . '">', 6);
+    $html .= cm\space_br($article->category1, 7);
+    $html .= cm\space_br('</a>', 6);
+    $html .= cm\space_br("　|　", 6);
+    $parameters2["mmb_category"] = $article->category_id2;
+    $html .= cm\space_br('<a href="' . MMB_INDEX . '?' . $state->get_new_url_parameters($parameters2, "") . '">', 6);
+    $html .= cm\space_br($article->category2, 7);
+    $html .= cm\space_br('</a>', 6);
+    $html .= cm\space_br('</p>', 5);
+    $comments_num = count_comments_in_one_article($article->date);
+    $html .= cm\space_br('<p>', 5);
+    if($comments_num > 0){
+        $parameters2["mmb_category"] = null;
+        $parameters2["mmb_day"] = $article->date;
+        $html .= cm\space_br('<a href="' . MMB_INDEX . '?' . $state->get_new_url_parameters($parameters2, "") . '">', 6);
+        $html .= cm\space_br("コメント（" . $comments_num . "）", 7);
+        $html .= cm\space_br('</a>', 6);
+    } else {
+        $html .= cm\space_br("コメント（" . $comments_num . "）", 6);
+    }
+
+    $html .= cm\space_br('</p>', 5);
+    $html .= cm\space_br('</div>', 4);
+    return $html;
+}
+
 function get_articles_html($articles, $state){
+    rsort($articles);
+//    var_dump($articles);
     $html = "";
-    foreach ($articles as $article){
-        $parameters = [
-            "mmb_category" => null,
-            "mmb_month" => null,
-            "mmb_day" => $article->date
-        ];
-        $article->get_lines();
-        $html .= cm\space_br('<div class="mmb_article">', 3);
-        $html .= cm\space_br('<hr>', 4);
-        $html .= cm\space_br('<div class="mmb_date">', 4);
-        $html .= cm\space_br($article->date_string . "　|　", 5);
-        $html .= cm\space_br($article->category1 . "　|　", 5);
-        $html .= cm\space_br($article->category2, 5);
-        $html .= cm\space_br('</div>', 4);
-        $html .= cm\space_br('<h2>', 4);
-        $html .= cm\space_br('<a href="' . MMB_INDEX . '?' . $state->get_new_url_parameters($parameters, "") . '">' . $article->title . '</a>', 5);
-        $html .= cm\space_br('</h2>', 4);
-        $html .= cm\space_br('<div class="mmb_text">', 4);
-        foreach ($article->lines as $line){
-            $html .= cm\space_br('<p>' . $line . '</p>', 5);
+    $start_article = ($state->page - 1) * MMB_MAX_ARTICLES_PER_PAGE;
+    $end_article = $state->page * MMB_MAX_ARTICLES_PER_PAGE;
+//    foreach ($articles as $article){
+    for($i = $start_article; $i < $end_article; $i++){
+        if(isset($articles[$i])){
+            $parameters = [
+                "mmb_category" => null,
+                "mmb_month" => null,
+                "mmb_day" => $articles[$i]->date
+            ];
+            $articles[$i]->get_lines();
+            $html .= cm\space_br('<div class="mmb_article">', 3);
+            $html .= cm\space_br('<hr>', 4);
+            $html .= cm\space_br('<div class="mmb_date">', 4);
+            $html .= cm\space_br($articles[$i]->date_string, 5);
+            $html .= cm\space_br('</div>', 4);
+            $html .= cm\space_br('<h2>', 4);
+            $html .= cm\space_br('<a href="' . MMB_INDEX . '?' . $state->get_new_url_parameters($parameters, "") . '">' . $articles[$i]->title . '</a>', 5);
+            $html .= cm\space_br('</h2>', 4);
+            $html .= cm\space_br('<div class="mmb_text">', 4);
+            foreach ($articles[$i]->lines as $line){
+                $html .= cm\space_br('<p>' . $line . '</p>', 5);
+            }
+            $html .= cm\space_br('</div>', 4);
+            $html .= get_article_footer_html($articles[$i], $state);
+            $html .= cm\space_br('</div>', 3);
+            if(MMB_COMMENT && $state->mmb_day !== null){
+                $html .= cm\space_br('<hr>', 3);
+                $html .= cm\space_br('<h3>コメント</h3>', 3);
+                $html .= phbbs\phbbs_get_html("mmb_" . $state->mmb_day);
+            }
         }
-        $html .= cm\space_br('</div>', 4);
-        $html .= cm\space_br('</div>', 3);
-        if(MMB_COMMENT && $state->mmb_day !== null){
-            $html .= cm\space_br('<hr>', 3);
-            $html .= cm\space_br('<h3>コメント</h3>', 3);
-            $html .= phbbs\phbbs_get_html("mmb_" . $state->mmb_day);
-        }
+    }
+    if(count($articles) > MMB_MAX_ARTICLES_PER_PAGE){
+        $link = new NumberLink(count($articles), MMB_MAX_ARTICLES_PER_PAGE);
+        $html .= $link->get_page_links_html("", MMB_INDEX);
     }
     return $html;
 }

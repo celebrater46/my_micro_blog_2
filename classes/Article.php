@@ -11,6 +11,8 @@ class Article
     public $date = 10000101; // 20220103
     public $date_string = "1000年1月1日";
     public $title;
+    public $category_id1 = 0;
+    public $category_id2 = 0;
     public $category1 = "未分類";
     public $category2 = "未分類";
     public $imgs = [];
@@ -26,6 +28,8 @@ class Article
             $this->date = (int)$temp[2];
             $this->date_string = $this->get_date_string($temp[2]);
             $this->title = $temp[3];
+            $this->category_id1 = (int)$temp[0];
+            $this->category_id2 = (int)$temp[1];
             if(count($array) > 2) {
                 $this->category1 = $this->get_category((int)$temp[0]);
             }

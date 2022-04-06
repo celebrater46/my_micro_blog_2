@@ -13,6 +13,23 @@ require_once "classes/Category.php";
 require_once "classes/Month.php";
 require_once "classes/Comment.php";
 
+function count_comments_in_one_article($date){
+    $list = get_comments_list();
+    if($list !== null){
+        $array = [];
+        $num = 0;
+        foreach ($list as $line){
+            $temp = explode("|", $line);
+            if((int)$temp[0] === $date){
+                $num++;
+            }
+        }
+        return $num;
+    } else {
+        return null;
+    }
+}
+
 function get_comments(){
     $list = get_comments_list();
     $articles_list = get_articles_list();
@@ -53,9 +70,10 @@ function get_months($list){
 }
 
 function get_articles($list){
-    $list_per_page = get_list_per_page($list, MMB_MAX_ARTICLES_PER_PAGE); // max:
+//    $list_per_page = get_list_per_page($list, MMB_MAX_ARTICLES_PER_PAGE); // max:
     $new_array = [];
-    foreach ($list_per_page as $line){
+//    foreach ($list_per_page as $line){
+    foreach ($list as $line){
         array_push($new_array, new Article($line));
     }
     return $new_array;
@@ -155,21 +173,21 @@ function get_articles_list(){
     }
 }
 
-function get_list_per_page($list, $max){
-    $temp_array = [];
-    if((int)$max > 0){
-        for($i = 0; $i < $max; $i++){
-            if(isset($list[$i])){
-                array_push($temp_array, $list[$i]);
-            } else {
-                break;
-            }
-        }
-        return $temp_array;
-    } else {
-        return $list;
-    }
-}
+//function get_list_per_page($list, $max){
+//    $temp_array = [];
+//    if((int)$max > 0){
+//        for($i = 0; $i < $max; $i++){
+//            if(isset($list[$i])){
+//                array_push($temp_array, $list[$i]);
+//            } else {
+//                break;
+//            }
+//        }
+//        return $temp_array;
+//    } else {
+//        return $list;
+//    }
+//}
 
 // 202101, 202102 ...
 function get_month_array($list){
