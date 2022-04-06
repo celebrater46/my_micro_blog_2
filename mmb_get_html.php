@@ -12,6 +12,29 @@ require_once "classes/State.php";
 require_once MMB_HCM_PATH;
 require_once MMB_PHBBS_PATH . "phbbs_get_html.php";
 
+function get_comment_ul($comments, $state){
+    $html = cm\space_br('<div>', 3);
+    $html .= cm\space_br('<hr>', 4);
+    $html .= cm\space_br('<h2>' . "新着コメント" . '</h2>', 4);
+    $html .= cm\space_br('<ul class="mmb_comments">', 4);
+//    var_dump($comments);
+    foreach ($comments as $comment){
+        $parameters = [
+            "mmb_category" => null,
+            "mmb_month" => null,
+            "mmb_day" => $comment->article_id
+        ];
+        $html .= cm\space_br('<li>', 5);
+        $html .= cm\space_br('<a href="' . MMB_INDEX . '?' . $state->get_new_url_parameters($parameters, "") . '">', 6);
+        $html .= cm\space_br($comment->article_title . " by " . $comment->user_name, 7);
+        $html .= cm\space_br('</a>', 6);
+        $html .= cm\space_br('</li>', 5);
+    }
+    $html .= cm\space_br('</ul>', 4);
+    $html .= cm\space_br('</div>', 3);
+    return $html;
+}
+
 function get_archives_ul($months, $state){
     $html = cm\space_br('<div>', 3);
     $html .= cm\space_br('<hr>', 4);
@@ -89,7 +112,14 @@ function get_articles_html($articles, $state){
     return $html;
 }
 
-function get_splitter_div($articles, $categories, $months, $state){
+function get_splitter_div($state){
+    $list = get_articles_list(); // 220101|これはタイトルです|カテゴリ1|カテゴリ2, 220103|テストタイトルです|カテゴリ3|カテゴリ2...
+    $categories = get_categories($state, $list);
+    $months = get_months($list);
+    $comments = get_comments();
+//    var_dump($comments);
+    $extracted = extract_articles_list($list, $state, $months);
+    $articles = get_articles($extracted);
     $html = cm\space_br('<div class="mmb_splitter">', 1);
     $html .= cm\space_br('<div class="mmb_main">', 2);
     if($state->mmb_category > -1){
@@ -102,6 +132,7 @@ function get_splitter_div($articles, $categories, $months, $state){
     $html .= cm\space_br('<div class="mmb_side">', 2);
     $html .= get_category_ul($categories, $state);
     $html .= get_archives_ul($months, $state);
+    $html .= get_comment_ul($comments, $state);
     $html .= cm\space_br('</div>', 2);
     $html .= cm\space_br('</div>', 1);
     return $html;
@@ -117,12 +148,12 @@ function get_head_html(){
 
 function mmb_get_html(){
     $state = new State();
-    $list = get_articles_list(); // 220101|これはタイトルです|カテゴリ1|カテゴリ2, 220103|テストタイトルです|カテゴリ3|カテゴリ2...
-    $categories = get_categories($state, $list);
-    $months = get_months($list);
-    $extracted = extract_articles_list($list, $state, $months);
-    $articles = get_articles($extracted);
+//    $list = get_articles_list(); // 220101|これはタイトルです|カテゴリ1|カテゴリ2, 220103|テストタイトルです|カテゴリ3|カテゴリ2...
+//    $categories = get_categories($state, $list);
+//    $months = get_months($list);
+//    $extracted = extract_articles_list($list, $state, $months);
+//    $articles = get_articles($extracted);
     $html = get_head_html();
-    $html .= get_splitter_div($articles, $categories, $months, $state);
+    $html .= get_splitter_div($state);
     return $html;
 }

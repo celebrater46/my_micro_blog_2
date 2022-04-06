@@ -34,6 +34,10 @@ ul{
     list-style: none;
 }
 
+ul.mmb_comments{
+    padding: 0 25px;
+}
+
 div.container{
     width: 1000px;
     text-align: left;

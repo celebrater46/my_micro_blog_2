@@ -4,12 +4,30 @@ namespace my_micro_blog;
 
 use my_micro_blog\classes\Article;
 use my_micro_blog\classes\Category;
+use my_micro_blog\classes\Comment;
 use my_micro_blog\classes\Month;
 
 require_once "init.php";
 require_once "classes/Article.php";
 require_once "classes/Category.php";
 require_once "classes/Month.php";
+require_once "classes/Comment.php";
+
+function get_comments(){
+    $list = get_comments_list();
+    $articles_list = get_articles_list();
+    if($list !== null){
+        $array = [];
+        $i = 0;
+        foreach ($list as $line){
+            array_push($array, new Comment($i, $line, $articles_list));
+            $i++;
+        }
+        return $array;
+    } else {
+        return null;
+    }
+}
 
 function get_categories($state, $article_list){
     $list = get_categories_list();
@@ -72,6 +90,16 @@ function get_articles($list){
 //        return null;
 //    }
 //}
+
+function get_comments_list(){
+    $list = MMB_PATH . "lists/comments.txt";
+    if(file_exists($list)){
+        return file($list);
+    } else {
+        echo "ERROR: " . $list . " が存在しないか、読み込めません。";
+        return null;
+    }
+}
 
 function get_categories_list(){
     if(file_exists(MMB_PATH . "lists/categories.txt")){
