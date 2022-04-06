@@ -11,17 +11,17 @@ class Comment
     public $id;
     public $article_id; // 20211231(int)
     public $article_title;
-    public $date; // 2021-12-31_10:37:37
+//    public $date; // 2021-12-31_10:37:37
     public $user_name;
     public $comment_lines = [];
 
     function __construct($id, $line, $articles_list){
-        // $list == 20211231|2022-04-06_10:37:37|名無しのコメンテーター|0
+        // $list == 20211231|名無しのコメンテーター|0
         $temp = explode("|", $line);
         $this->id = $id;
         $this->article_id = (int)$temp[0];
-        $this->date = $temp[1];
-        $this->user_name = $temp[2];
+//        $this->date = $temp[1];
+        $this->user_name = $temp[1];
         $this->article_title = $this->get_article_title($articles_list);
     }
 
