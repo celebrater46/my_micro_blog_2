@@ -92,6 +92,10 @@ div.mmb_article_footer{
     padding: 30px 0 10px;
 }
 
+p.mmb_to_login{
+    margin: 20px;
+}
+
 span {
     line-height: 1.3em;
 }

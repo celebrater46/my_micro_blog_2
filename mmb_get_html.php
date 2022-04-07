@@ -15,6 +15,18 @@ require_once MMB_PHBBS_PATH . "phbbs_get_html.php";
 require_once MMB_PNLG_PATH . 'init.php';
 require_once MMB_PNLG_PATH . 'classes/NumberLink.php';
 
+function get_link_to_login(){
+    $html = cm\space_br('<div>', 3);
+    $html .= cm\space_br('<hr>', 4);
+    $html .= cm\space_br('<p class="mmb_to_login">', 4);
+    $html .= cm\space_br('<a href="' . MMB_PATH_HTTP . 'login.php">', 5);
+    $html .= cm\space_br('管理用ページ', 6);
+    $html .= cm\space_br('</a>', 5);
+    $html .= cm\space_br('</p>', 4);
+    $html .= cm\space_br('</div>', 3);
+    return $html;
+}
+
 function get_comment_ul($comments, $state){
     $html = cm\space_br('<div>', 3);
     $html .= cm\space_br('<hr>', 4);
@@ -182,6 +194,7 @@ function get_splitter_div($state){
     $html .= get_category_ul($categories, $state);
     $html .= get_archives_ul($months, $state);
     $html .= get_comment_ul($comments, $state);
+    $html .= get_link_to_login();
     $html .= cm\space_br('</div>', 2);
     $html .= cm\space_br('</div>', 1);
     return $html;

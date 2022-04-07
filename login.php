@@ -34,7 +34,7 @@ if (!empty($_POST)) {
     if($err_msg["username"] === "" && $err_msg["password"] === ""){
         if(MMB_ADMIN === $user_name && MMB_ADMIN_PASSWORD === $user_password){
             $_SESSION['username'] = $user_name;
-            header('Location: mypage.php');
+            header('Location: admin.php');
             exit;
         }else{
             $err_msg['username'] = 'ユーザー名かパスワードが間違っています。Either the name or password is incorrect.';
@@ -63,6 +63,7 @@ if (!empty($_POST)) {
     <label for=""><span>パスワード - Password</span>
         <input type="password" name="password" id=""><br>
     </label>
+    <br><br>
     <input type="submit" value="送信 - Submit">
 </form>
 </body>
