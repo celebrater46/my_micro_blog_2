@@ -100,7 +100,7 @@ function get_article_footer_html($article, $state){
     $html .= cm\space_br($article->category2, 7);
     $html .= cm\space_br('</a>', 6);
     $html .= cm\space_br('</p>', 5);
-    $comments_num = count_comments_in_one_article($article->date);
+    $comments_num = count_comments_in_one_article($article->date, $state);
     $html .= cm\space_br('<p>', 5);
     if($comments_num > 0){
         $parameters2["mmb_category"] = null;
@@ -165,7 +165,7 @@ function get_splitter_div($state){
     $list = get_articles_list(); // 220101|これはタイトルです|カテゴリ1|カテゴリ2, 220103|テストタイトルです|カテゴリ3|カテゴリ2...
     $categories = get_categories($state, $list);
     $months = get_months($list);
-    $comments = get_comments();
+    $comments = get_comments($state);
 //    var_dump($comments);
     $extracted = extract_articles_list($list, $state, $months);
     $articles = get_articles($extracted);

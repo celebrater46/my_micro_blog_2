@@ -13,8 +13,8 @@ require_once "classes/Category.php";
 require_once "classes/Month.php";
 require_once "classes/Comment.php";
 
-function count_comments_in_one_article($date){
-    $list = get_comments_list();
+function count_comments_in_one_article($date, $state){
+    $list = get_comments_list($state);
     if($list !== null){
         $array = [];
         $num = 0;
@@ -30,14 +30,14 @@ function count_comments_in_one_article($date){
     }
 }
 
-function get_comments(){
-    $list = get_comments_list();
+function get_comments($state){
+    $list = get_comments_list($state);
     $articles_list = get_articles_list();
     if($list !== null){
         $array = [];
         $i = 0;
         foreach ($list as $line){
-            array_push($array, new Comment($i, $line, $articles_list));
+            array_push($array, new Comment($i, $line, $articles_list, $state));
             $i++;
         }
         return $array;
@@ -109,8 +109,9 @@ function get_articles($list){
 //    }
 //}
 
-function get_comments_list(){
-    $list = MMB_PATH . "lists/comments.txt";
+function get_comments_list($state){
+//    $list = MMB_PATH . "lists/comments.txt.old";
+    $list = MMB_PHBBS_PATH . "bbs/lists/mmb_" . $state->mmb_day . ".log";
     if(file_exists($list)){
         return file($list);
     } else {

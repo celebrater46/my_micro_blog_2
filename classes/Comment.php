@@ -15,13 +15,13 @@ class Comment
     public $user_name;
     public $comment_lines = [];
 
-    function __construct($id, $line, $articles_list){
+    function __construct($id, $line, $articles_list, $state){
         // $list == 20211231|名無しのコメンテーター|0
         $temp = explode("|", $line);
         $this->id = $id;
-        $this->article_id = (int)$temp[0];
+        $this->article_id = $state->mmb_day;
 //        $this->date = $temp[1];
-        $this->user_name = $temp[1];
+        $this->user_name = $temp[4];
         if($articles_list !== null){
             $this->article_title = $this->get_article_title($articles_list);
         }
