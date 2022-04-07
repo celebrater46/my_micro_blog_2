@@ -13,14 +13,18 @@ require_once "classes/Category.php";
 require_once "classes/Month.php";
 require_once "classes/Comment.php";
 
-function count_comments_in_one_article($date, $state){
-    $list = get_comments_list($state);
+function count_comments_in_one_article($date){
+    $list = get_comments_list();
+//    var_dump($list);
     if($list !== null){
         $array = [];
         $num = 0;
         foreach ($list as $line){
-            $temp = explode("|", $line);
-            if((int)$temp[0] === $date){
+            $temp = explode("<>", $line);
+//            echo "var temp in count_comments_in_one_article()" . "<br>";
+//            var_dump($temp);
+//            echo "<br>";
+            if((int)$temp[13] === $date){
                 $num++;
             }
         }
@@ -30,14 +34,17 @@ function count_comments_in_one_article($date, $state){
     }
 }
 
-function get_comments($state){
-    $list = get_comments_list($state);
+function get_comments(){
+    $list = get_comments_list();
+//    echo "var list in get_comments()" . "<br>";
+//    var_dump($list);
+//    echo "<br>";
     $articles_list = get_articles_list();
     if($list !== null){
         $array = [];
         $i = 0;
         foreach ($list as $line){
-            array_push($array, new Comment($i, $line, $articles_list, $state));
+            array_push($array, new Comment($i, $line, $articles_list));
             $i++;
         }
         return $array;
@@ -109,9 +116,41 @@ function get_articles($list){
 //    }
 //}
 
-function get_comments_list($state){
+function add_thread_name_to_list_line($log){
+    $date = str_replace([MMB_PHBBS_PATH . "bbs/lists/" . MMB_PHBBS_THREAD_INIT, ".log"], "", $log); // 20211231
+    $lines = file($log);
+    $array = [];
+    foreach ($lines as $line){
+        array_push($array, $line . "<>" . $date . "<>0");
+    }
+    return $array;
+}
+
+function get_comments_list(){
 //    $list = MMB_PATH . "lists/comments.txt.old";
-    $list = MMB_PHBBS_PATH . "bbs/lists/mmb_" . $state->mmb_day . ".log";
+    $logs = glob(MMB_PHBBS_PATH . "bbs/lists/*");
+//    var_dump($logs);
+    if($logs !== false){
+        $lines = [];
+        foreach ($logs as $log){
+            if(strpos($log, MMB_PHBBS_THREAD_INIT) !== false){
+//            array_push($array, $log);
+//                var_dump($log);
+//                array_push($lines, add_thread_name_to_list_line($log));
+                $array = add_thread_name_to_list_line($log);
+                foreach ($array as $line){
+                    array_push($lines, $line);
+                }
+            }
+        }
+        return $lines;
+    } else {
+        echo "ERROR: " . MMB_PHBBS_PATH . "bbs/lists が存在しないか、読み込めません。";
+        return null;
+    }
+
+
+    $list = MMB_PHBBS_PATH . "bbs/lists/" . MMB_PHBBS_THREAD_INIT . $state->mmb_day . ".log";
     if(file_exists($list)){
         return file($list);
     } else {

@@ -58,7 +58,7 @@ class Article
         $imgs = glob(MMB_IMG . $this->date . '/*');
         $array = [];
         foreach ($imgs as $img){
-            preg_match('/\/([^\.]+)\.(png|PNG|jpg|JPG|gif|GIF)/', $img, $file_name);
+            preg_match('/\/([^\/]+)\.(png|PNG|jpg|JPG|gif|GIF)/', $img, $file_name);
             array_push($array, MMB_IMG_HTTP . $this->date . $file_name[0]);
         }
         return $array;
