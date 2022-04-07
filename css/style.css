@@ -44,6 +44,11 @@ div.container{
     margin: 20px auto;
 }
 
+div.admin.container{
+    width: 640px;
+    margin: 0 auto;
+}
+
 div.description{
     margin: 0 auto 50px;
 }
@@ -139,4 +144,30 @@ span.f9{
 img.mmb_img{
     width: 640px;
     height: auto;
+}
+
+div.mmb_form.flex{
+    display: flex;
+}
+
+div.mmb_form.flex > input{
+    width: 150px;
+}
+
+input, textarea, select{
+    color: silver;
+    background-color: #222222;
+}
+
+input.mmb_subtitle{
+    width: 320px;
+}
+
+textarea.mmb_body{
+    width: 640px;
+    height: 400px;
+}
+
+select.mmb_category{
+    margin: 0 0 0 10px;
 }

@@ -8,8 +8,7 @@
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/admin.php" beforeDir="false" afterPath="$PROJECT_DIR$/admin.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/css/style.css" beforeDir="false" afterPath="$PROJECT_DIR$/css/style.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/login.php" beforeDir="false" afterPath="$PROJECT_DIR$/login.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mmb_get_html.php" beforeDir="false" afterPath="$PROJECT_DIR$/mmb_get_html.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lists/articles.txt" beforeDir="false" afterPath="$PROJECT_DIR$/lists/articles.txt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -64,7 +63,7 @@
       <workItem from="1649151262282" duration="597000" />
       <workItem from="1649206098595" duration="6796000" />
       <workItem from="1649233920673" duration="5900000" />
-      <workItem from="1649300000019" duration="7621000" />
+      <workItem from="1649300000019" duration="13282000" />
     </task>
     <servers />
   </component>
