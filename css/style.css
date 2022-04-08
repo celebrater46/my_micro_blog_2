@@ -150,6 +150,10 @@ img.mmb_img{
     height: auto;
 }
 
+div.mmb_form{
+    padding: 20px 0;
+}
+
 div.mmb_form.flex{
     display: flex;
 }

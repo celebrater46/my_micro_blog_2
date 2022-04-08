@@ -10,6 +10,7 @@ class Article
 {
     public $date = 10000101; // 20220103
     public $date_string = "1000年1月1日";
+    public $date_string2 = "1000-01-01_00:00:00";
     public $title;
     public $category_id1 = 0;
     public $category_id2 = 0;
@@ -18,7 +19,8 @@ class Article
     public $imgs = [];
     public $lines = [];
 
-    function __construct($line){ // $line == 220103|タイトル|カテゴリ1|カテゴリ2
+    function __construct($line){
+        // $line == 1|2|20211231|去年のタイトルです|2021-12-31_09:33:33|0
         if(strpos($line,'|') !== false){
             $temp = explode("|", $line); // 220103, "タイトル", "カテゴリ1", "カテゴリ2"
             $array = [];
@@ -27,6 +29,7 @@ class Article
             }
             $this->date = (int)$temp[2];
             $this->date_string = $this->get_date_string($temp[2]);
+            $this->date_string2 = $temp[4];
             $this->title = $temp[3];
             $this->category_id1 = (int)$temp[0];
             $this->category_id2 = (int)$temp[1];
