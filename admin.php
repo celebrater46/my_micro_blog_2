@@ -114,14 +114,28 @@ function get_article_list_html(){
     }
 }
 
+function get_menu_html(){
+    $html = cm\space_br('<h2>コントロールパネル</h2>', 2);
+    $html .= cm\space_br('<h3 class="mmb_control"><a href="' . MMB_PATH_HTTP . 'admin.php?mmb_mode=1">新規投稿</a></h3>', 2);
+    $html .= cm\space_br('<h3 class="mmb_control"><a href="' . MMB_PATH_HTTP . 'admin.php?mmb_mode=2">記事一覧</a></h3>', 2);
+    $html .= cm\space_br('<h3 class="mmb_control"><a href="' . MMB_PATH_HTTP . 'admin.php?mmb_mode=3">コメント管理</a></h3>', 2);
+    return $html;
+}
+
 function get_admin_html($mode){
     $html = get_head_html();
     $html .= cm\space_br('<div class="admin container">', 1);
     $html .= cm\space_br('<h1>My Micro Blog - My Page</h1>', 2);
-    if($mode === null){
-        $html .= get_form_html(null);
-    } else {
-        $html .= get_article_list_html();
+//    if($mode === null){
+//        $html .= get_form_html(null);
+//    } else {
+//        $html .= get_article_list_html();
+//    }
+//    var_dump($mode);
+    switch($mode){
+        case 1: $html .= get_form_html(null); break;
+        case 2: $html .= get_article_list_html(); break;
+        default: $html .= get_menu_html(); break;
     }
     $html .= cm\space_br('<br><br><br>', 2);
     $html .= cm\space_br("<a href='logout.php'>ログアウト</a>", 2);

@@ -17,6 +17,10 @@ h2{
     font-size: 1.6em;
 }
 
+h3.mmb_control{
+    padding: 0 30px;
+}
+
 hr{
     opacity: 0.5;
 }
