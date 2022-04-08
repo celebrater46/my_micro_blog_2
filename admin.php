@@ -74,7 +74,9 @@ function get_article_obj($state){
         if(file_exists($path)){
             $list = get_articles_list();
             $extracted = extract_articles_list($list, $state, null);
-            return new Article($extracted[0]);
+            $article = new Article();
+            $article->init($extracted[0]);
+            return $article;
         } else {
             echo "Not Found: " . $path . "<br><br>";
             echo "<a href='admin.php'>戻る</a>";
@@ -185,4 +187,8 @@ function get_admin_html($state){
     $html .= cm\space_br('</div>', 1);
     $html .= get_foot_html();
     return $html;
+}
+
+function post_article($state){
+
 }

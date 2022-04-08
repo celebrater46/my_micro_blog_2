@@ -81,7 +81,9 @@ function get_articles($list){
     $new_array = [];
 //    foreach ($list_per_page as $line){
     foreach ($list as $line){
-        array_push($new_array, new Article($line));
+        $article = new Article();
+        $article->init($line);
+        array_push($new_array, $article);
     }
     return $new_array;
 }
