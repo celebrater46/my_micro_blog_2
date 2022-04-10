@@ -163,7 +163,9 @@ function get_comments_list(){
 
 function get_categories_list(){
     if(file_exists(MMB_PATH . "lists/categories.txt")){
-        return file(MMB_PATH . "lists/categories.txt");
+        $list = file(MMB_PATH . "lists/categories.txt");
+        return array_unshift($list, "未分類|unknown|0");
+//        return file(MMB_PATH . "lists/categories.txt");
     } else {
         echo "ERROR: categories.txt が存在しないか、読み込めません。";
         return null;

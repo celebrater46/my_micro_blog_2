@@ -5,6 +5,7 @@ namespace my_micro_blog;
 use fp_common_modules as cm;
 use my_micro_blog\classes\AdminState;
 use my_micro_blog\classes\Article;
+use my_micro_blog\classes\PostArticle;
 
 require_once "init.php";
 require_once "main.php";
@@ -23,8 +24,12 @@ $state = new AdminState();
 if (isset($_SESSION['username'])) {
 //    echo 'Welcome ' .  h($_SESSION['username']) . ".<br><br>";
 //    echo "<a href='logout.php'>ログアウト</a>";
-    echo get_admin_html($state);
-    exit;
+    if($state->mmb_post !== null){
+        post_article();
+    } else {
+        echo get_admin_html($state);
+        exit;
+    }
 } else {
     echo '404 Not Found.';
 }
@@ -95,24 +100,24 @@ function get_form_html($state){
     $subtitle = $article === null ? "" : $article->title;
     $date = $article === null ? date('Y-m-d_H:i:s') : $article->date_string2;
     $html = cm\space_br('<h2>新規投稿</h2>', 2);
-    $html .= cm\space_br('<form action="post.php" method="post">', 2);
+    $html .= cm\space_br('<form action="admin.php?post=1" method="post">', 2);
     $html .= cm\space_br('<div class="mmb_form">', 3);
     $html .= cm\space_br('<label>', 4);
     $html .= cm\space_br('<span class="mmb_form">タイトル：</span>', 5);
     $html .= cm\space_br('</label><br>', 4);
-    $html .= cm\space_br('<input class="mmb_subtitle" type="text" name="name" value="' . $subtitle . '">', 5);
+    $html .= cm\space_br('<input class="mmb_subtitle" type="text" name="subtitle" value="' . $subtitle . '">', 5);
     $html .= cm\space_br('</div>', 3);
     $html .= cm\space_br('<div class="mmb_form">', 3);
     $html .= cm\space_br('<label>', 4);
     $html .= cm\space_br('<span class="mmb_form">本文：</span>', 5);
     $html .= cm\space_br('</label><br>', 4);
-    $html .= cm\space_br('<textarea class="mmb_body" name="text">' . implode("\n", $article->lines) . '</textarea>', 5);
+    $html .= cm\space_br('<textarea class="mmb_body" name="body">' . implode("\n", $article->lines) . '</textarea>', 5);
     $html .= cm\space_br('</div>', 3);
     $html .= cm\space_br('<div class="mmb_form flex">', 3);
     $html .= cm\space_br('<label>', 4);
     $html .= cm\space_br('<span class="mmb_form">日時：</span>', 5);
     $html .= cm\space_br('</label><br>', 4);
-    $html .= cm\space_br('<input class="mmb_date" type="text" name="year" value="' . $date . '">', 4);
+    $html .= cm\space_br('<input class="mmb_date" type="text" name="date2" value="' . $date . '">', 4);
 //    $html .= cm\space_br('<input class="mmb_year" type="text" name="year" value="">年', 4);
 //    $html .= cm\space_br('<input class="mmb_month" type="text" name="month" value="">月', 4);
 //    $html .= cm\space_br('<input class="mmb_day" type="text" name="day" value="">日', 4);
@@ -189,6 +194,10 @@ function get_admin_html($state){
     return $html;
 }
 
-function post_article($state){
-
+function post_article(){
+    $pa = new PostArticle();
+    $pa->post_init();
+    $pa->update_article_list();
+    $pa->save_body();
+    var_dump($pa);
 }
