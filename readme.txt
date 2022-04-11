@@ -30,6 +30,7 @@ MITライセンスでの配布となります。
 
 init.php にもありますが、このブログを機能させるためには
 fp_common_modules と、コメント機能を使用するにはさらに PHP HP BBS が必要です。
+github より git clone するか、あるいは
 https://enin-world.sakura.ne.jp/ のアプリページよりダウンロードして解凍し、
 お使いのレンタルサーバーにアップロードしてください。
 
