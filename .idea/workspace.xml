@@ -7,7 +7,9 @@
     <list default="true" id="b8723577-c7b7-46cb-a1e3-2a2eaa6242e3" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/admin.php" beforeDir="false" afterPath="$PROJECT_DIR$/admin.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/classes/Article.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/Article.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/classes/PostArticle.php" beforeDir="false" afterPath="$PROJECT_DIR$/classes/PostArticle.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lists/articles.txt" beforeDir="false" afterPath="$PROJECT_DIR$/lists/articles.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.php" beforeDir="false" afterPath="$PROJECT_DIR$/main.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -65,7 +67,8 @@
       <workItem from="1649233920673" duration="5900000" />
       <workItem from="1649300000019" duration="13886000" />
       <workItem from="1649385320186" duration="8062000" />
-      <workItem from="1649584728808" duration="5126000" />
+      <workItem from="1649584728808" duration="6218000" />
+      <workItem from="1649649001758" duration="2010000" />
     </task>
     <servers />
   </component>

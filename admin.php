@@ -10,6 +10,7 @@ use my_micro_blog\classes\PostArticle;
 require_once "init.php";
 require_once "main.php";
 require_once "classes/AdminState.php";
+require_once "classes/PostArticle.php";
 require_once "classes/Article.php";
 require_once MMB_HCM_PATH;
 
@@ -60,6 +61,7 @@ EOT;
 }
 
 function get_category_select($num, $list, $selected){
+//    var_dump($list);
     if($list !== null){
         $html = cm\space_br('<select class="mmb_category" name="category' . $num . '">', 3);
         foreach ($list as $line){
@@ -100,7 +102,7 @@ function get_form_html($state){
     $subtitle = $article === null ? "" : $article->title;
     $date = $article === null ? date('Y-m-d_H:i:s') : $article->date_string2;
     $html = cm\space_br('<h2>新規投稿</h2>', 2);
-    $html .= cm\space_br('<form action="admin.php?post=1" method="post">', 2);
+    $html .= cm\space_br('<form action="admin.php?mmb_post=1" method="post">', 2);
     $html .= cm\space_br('<div class="mmb_form">', 3);
     $html .= cm\space_br('<label>', 4);
     $html .= cm\space_br('<span class="mmb_form">タイトル：</span>', 5);
@@ -128,7 +130,8 @@ function get_form_html($state){
     $html .= get_category_select(1, $list, $article->category1);
     $html .= get_category_select(2, $list, $article->category2);
     $html .= cm\space_br('</div>', 3);
-    $html .= cm\space_br('<p>※未入力なら現在時刻</p>', 3);
+    $html .= cm\space_br('<p>※自国記入例：2022-04-01_02:02:03（未入力なら現在時刻）</p>', 3);
+    $html .= cm\space_br('<input type="submit" value="投稿する">', 3);
     $html .= cm\space_br('</form>', 2);
     $html .= cm\space_br('<br>', 2);
     $html .= cm\space_br("<a href='admin.php'>一覧へ戻る</a>", 2);

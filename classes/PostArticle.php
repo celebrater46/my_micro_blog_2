@@ -71,7 +71,9 @@ class PostArticle extends Article
         $list = get_categories_list();
         $i = 0;
         foreach ($list as $line){
-            if(strpos($str, $line) !== false){
+            $temp = explode("|", $line);
+//            if(strpos($str, $line) !== false){
+            if($temp[0] === $str){
                 return $i;
             } else {
                 $i++;

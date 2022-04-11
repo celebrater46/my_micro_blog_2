@@ -39,10 +39,10 @@ class Article
             $this->category_id1 = (int)$temp[0];
             $this->category_id2 = (int)$temp[1];
             if(count($array) > 2) {
-                $this->category1 = $this->get_category((int)$temp[0]);
+                $this->category1 = $this->get_category((int)$temp[0] - 1); // id:0 は未分類
             }
             if(count($array) > 3) {
-                $this->category2 = $this->get_category((int)$temp[1]);
+                $this->category2 = $this->get_category((int)$temp[1] - 1);
             }
             $this->imgs = $this->get_imgs();
         } else {
