@@ -14,6 +14,7 @@ class Comment
 //    public $date; // 2021-12-31_10:37:37
     public $user_name;
     public $comment_lines = [];
+    public $deleted;
 
     function __construct($id, $line, $articles_list){
         // $list == 20211231|名無しのコメンテーター|0
@@ -27,6 +28,7 @@ class Comment
         if($articles_list !== null){
             $this->article_title = $this->get_article_title($articles_list);
         }
+        $this->deleted = $temp[11] === "__DELETED__";
     }
 
     function get_article_title($list){

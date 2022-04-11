@@ -34,16 +34,19 @@ function get_comment_ul($comments, $state){
     $html .= cm\space_br('<ul class="mmb_comments">', 4);
 //    var_dump($comments);
     foreach ($comments as $comment){
-        $parameters = [
-            "mmb_category" => null,
-            "mmb_month" => null,
-            "mmb_day" => $comment->article_id
-        ];
-        $html .= cm\space_br('<li>', 5);
-        $html .= cm\space_br('<a href="' . MMB_INDEX . '?' . $state->get_new_url_parameters($parameters, "") . '">', 6);
-        $html .= cm\space_br($comment->article_title . " by " . $comment->user_name, 7);
-        $html .= cm\space_br('</a>', 6);
-        $html .= cm\space_br('</li>', 5);
+        if($comment->deleted === false){
+            $parameters = [
+                "mmb_mode" => null,
+                "mmb_category" => null,
+                "mmb_month" => null,
+                "mmb_day" => $comment->article_id
+            ];
+            $html .= cm\space_br('<li>', 5);
+            $html .= cm\space_br('<a href="' . MMB_INDEX . '?' . $state->get_new_url_parameters($parameters, "") . '">', 6);
+            $html .= cm\space_br($comment->article_title . " by " . $comment->user_name, 7);
+            $html .= cm\space_br('</a>', 6);
+            $html .= cm\space_br('</li>', 5);
+        }
     }
     $html .= cm\space_br('</ul>', 4);
     $html .= cm\space_br('</div>', 3);
@@ -57,6 +60,7 @@ function get_archives_ul($months, $state){
     $html .= cm\space_br('<ul>', 4);
     foreach ($months as $month){
         $parameters = [
+            "mmb_mode" => null,
             "mmb_category" => null,
             "mmb_month" => $month->id,
             "mmb_day" => null
@@ -78,6 +82,7 @@ function get_category_ul($categories, $state){
     $html .= cm\space_br('<ul>', 4);
     foreach ($categories as $category){
         $parameters = [
+            "mmb_mode" => null,
             "mmb_category" => $category->id,
             "mmb_month" => null,
             "mmb_day" => null
@@ -97,6 +102,7 @@ function get_article_footer_html($article, $state){
     $html = cm\space_br('<div class="mmb_article_footer">', 4);
     $html .= cm\space_br('<p>', 5);
     $parameters2 = [
+        "mmb_mode" => null,
         "mmb_category" => null,
         "mmb_month" => null,
         "mmb_day" => null
@@ -116,15 +122,20 @@ function get_article_footer_html($article, $state){
     $html .= cm\space_br('</p>', 5);
     $comments_num = count_comments_in_one_article($article->date);
     $html .= cm\space_br('<p>', 5);
-    if($comments_num > 0){
-        $parameters2["mmb_category"] = null;
-        $parameters2["mmb_day"] = $article->date;
-        $html .= cm\space_br('<a href="' . MMB_INDEX . '?' . $state->get_new_url_parameters($parameters2, "") . '">', 6);
-        $html .= cm\space_br("コメント（" . $comments_num . "）", 7);
-        $html .= cm\space_br('</a>', 6);
-    } else {
-        $html .= cm\space_br("コメント（" . $comments_num . "）", 6);
-    }
+    $parameters2["mmb_category"] = null;
+    $parameters2["mmb_day"] = $article->date;
+    $html .= cm\space_br('<a href="' . MMB_INDEX . '?' . $state->get_new_url_parameters($parameters2, "") . '">', 6);
+    $html .= cm\space_br("コメント（" . $comments_num . "）", 7);
+    $html .= cm\space_br('</a>', 6);
+//    if($comments_num > 0){
+//        $parameters2["mmb_category"] = null;
+//        $parameters2["mmb_day"] = $article->date;
+//        $html .= cm\space_br('<a href="' . MMB_INDEX . '?' . $state->get_new_url_parameters($parameters2, "") . '">', 6);
+//        $html .= cm\space_br("コメント（" . $comments_num . "）", 7);
+//        $html .= cm\space_br('</a>', 6);
+//    } else {
+//        $html .= cm\space_br("コメント（" . $comments_num . "）", 6);
+//    }
 
     $html .= cm\space_br('</p>', 5);
     $html .= cm\space_br('</div>', 4);
@@ -141,6 +152,7 @@ function get_articles_html($articles, $state){
     for($i = $start_article; $i < $end_article; $i++){
         if(isset($articles[$i])){
             $parameters = [
+                "mmb_mode" => null,
                 "mmb_category" => null,
                 "mmb_month" => null,
                 "mmb_day" => $articles[$i]->date
@@ -162,9 +174,11 @@ function get_articles_html($articles, $state){
             $html .= get_article_footer_html($articles[$i], $state);
             $html .= cm\space_br('</div>', 3);
             if(MMB_COMMENT && $state->mmb_day !== null){
+                $parameters["mmb_mode"] = 11; // 1-5 are for Admin Mode
+//                $posted_url = MMB_PATH_HTTP . "posted_comment.php";
                 $html .= cm\space_br('<hr>', 3);
                 $html .= cm\space_br('<h3>コメント</h3>', 3);
-                $html .= phbbs\phbbs_get_html("mmb_" . $state->mmb_day);
+                $html .= phbbs\phbbs_get_html("mmb_" . $state->mmb_day, MMB_INDEX);
             }
         }
     }
@@ -176,6 +190,9 @@ function get_articles_html($articles, $state){
 }
 
 function get_splitter_div($state){
+    if($state->mode === 11){
+
+    }
     $list = get_articles_list(); // 220101|これはタイトルです|カテゴリ1|カテゴリ2, 220103|テストタイトルです|カテゴリ3|カテゴリ2...
     $categories = get_categories($state, $list);
     $months = get_months($list);
@@ -212,12 +229,20 @@ function get_head_html(){
 
 function mmb_get_html(){
     $state = new State();
+    $html = "";
+    if(isset($_GET["code"])){
+        $html = phbbs\phbbs_get_result_from_code((int)$_GET["code"]);
+        $html .= cm\space_br('<br><br><p><a href="' . MMB_INDEX . '">- 戻る -</a></p>', 1);
+    } else {
+        $html = get_head_html();
+        $html .= get_splitter_div($state);
+    }
 //    $list = get_articles_list(); // 220101|これはタイトルです|カテゴリ1|カテゴリ2, 220103|テストタイトルです|カテゴリ3|カテゴリ2...
 //    $categories = get_categories($state, $list);
 //    $months = get_months($list);
 //    $extracted = extract_articles_list($list, $state, $months);
 //    $articles = get_articles($extracted);
-    $html = get_head_html();
-    $html .= get_splitter_div($state);
+//    $html = get_head_html();
+//    $html .= get_splitter_div($state);
     return $html;
 }

@@ -247,6 +247,7 @@ function get_admin_html($state){
     $html = get_head_html();
     $html .= cm\space_br('<div class="admin container">', 1);
     $html .= cm\space_br('<h1>My Micro Blog - My Page</h1>', 2);
+    // mmb_mode_11 === a posted comment page
     switch($state->mmb_mode){
         case 1: $html .= get_form_html(null); break;
         case 2: $html .= get_edit_articles_html($state); break;
