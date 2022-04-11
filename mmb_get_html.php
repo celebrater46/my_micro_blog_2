@@ -106,11 +106,13 @@ function get_article_footer_html($article, $state){
     $html .= cm\space_br('<a href="' . MMB_INDEX . '?' . $state->get_new_url_parameters($parameters2, "") . '">', 6);
     $html .= cm\space_br($article->category1, 7);
     $html .= cm\space_br('</a>', 6);
-    $html .= cm\space_br("　|　", 6);
-    $parameters2["mmb_category"] = $article->category_id2;
-    $html .= cm\space_br('<a href="' . MMB_INDEX . '?' . $state->get_new_url_parameters($parameters2, "") . '">', 6);
-    $html .= cm\space_br($article->category2, 7);
-    $html .= cm\space_br('</a>', 6);
+    if($article->category_id1 !== $article->category_id2){
+        $html .= cm\space_br("　|　", 6);
+        $parameters2["mmb_category"] = $article->category_id2;
+        $html .= cm\space_br('<a href="' . MMB_INDEX . '?' . $state->get_new_url_parameters($parameters2, "") . '">', 6);
+        $html .= cm\space_br($article->category2, 7);
+        $html .= cm\space_br('</a>', 6);
+    }
     $html .= cm\space_br('</p>', 5);
     $comments_num = count_comments_in_one_article($article->date);
     $html .= cm\space_br('<p>', 5);

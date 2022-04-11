@@ -30,7 +30,7 @@ if (isset($_SESSION['username'])) {
             post_article();
             break;
         case 2:
-            edit_article();
+            edit_article($state);
             break;
         case 3:
             delete_article($state);
@@ -115,8 +115,10 @@ function get_form_html($state){
     }
     $subtitle = $article === null ? "" : $article->title;
     $date = $article === null ? date('Y-m-d_H:i:s') : $article->date_string2;
+    $body = implode("\n", $article->lines);
+    $body = str_replace("\n　\n", "\n", $body);
     $html = cm\space_br('<h2>新規投稿</h2>', 2);
-    $html .= cm\space_br('<form action="admin.php?mmb_post=' . $state->mmb_mode . '" method="post">', 2);
+    $html .= cm\space_br('<form action="admin.php?mmb_post=' . $state->mmb_mode . ($state->mmb_day !== null ? "&mmb_day=" . $state->mmb_day : "") . '" method="post">', 2);
     $html .= cm\space_br('<div class="mmb_form">', 3);
     $html .= cm\space_br('<label>', 4);
     $html .= cm\space_br('<span class="mmb_form">タイトル：</span>', 5);
@@ -127,7 +129,7 @@ function get_form_html($state){
     $html .= cm\space_br('<label>', 4);
     $html .= cm\space_br('<span class="mmb_form">本文：</span>', 5);
     $html .= cm\space_br('</label><br>', 4);
-    $html .= cm\space_br('<textarea class="mmb_body" name="body">' . implode("\n", $article->lines) . '</textarea>', 5);
+    $html .= cm\space_br('<textarea class="mmb_body" name="body">' . $body . '</textarea>', 5);
     $html .= cm\space_br('</div>', 3);
     $html .= cm\space_br('<div class="mmb_form flex">', 3);
     $html .= cm\space_br('<label>', 4);
@@ -154,20 +156,24 @@ function get_form_html($state){
 
 function get_article_list_html(){
     $list = get_articles_list();
-    rsort($list);
+//    rsort($list);
     if($list !== null){
-        $i = count($list);
+//        $i = count($list);
+        $i = 1;
         $html = "";
         foreach ($list as $line){
             $temp = explode("|", $line);
             $title = strlen($temp[3] >= 10) ? mb_substr($temp[3], 0, 9) . '…' : $temp[3];
 //            0|5|20220104|ブログのテストでーす|2022-01-04_09:33:33|0
             $html .= cm\space_br("<p>" . $i . "　｜　", 2);
-            $html .= cm\space_br('<a href="admin.php?mmb_mode=2&mmb_day=' . $temp[2] . '" title="' . $title . '">' . $title . '</a>　｜　', 2);
-            $html .= cm\space_br($temp[4] . "　｜　", 2);
-            $html .= cm\space_br('<a href="admin.php?mmb_mode=4&mmb_day=' . $temp[2] . '">[削除]</a>', 2);
-            $i--;
+            $html .= cm\space_br('<a href="admin.php?mmb_mode=2&mmb_day=' . $temp[2] . '" title="' . $title . '">' . $title . '</a>　｜　', 3);
+            $html .= cm\space_br($temp[4] . "　｜　", 3);
+            $html .= cm\space_br('<a href="admin.php?mmb_mode=4&mmb_day=' . $temp[2] . '">[削除]</a>', 3);
+            $html .= cm\space_br("</p>", 2);
+//            $i--;
+            $i++;
         }
+        $html .= cm\space_br('<br><br><p><a href="admin.php">パネルトップへ戻る</a>', 2);
         return $html;
     } else {
         return "";
@@ -187,6 +193,7 @@ function get_menu_html(){
     $html .= cm\space_br('<h3 class="mmb_control"><a href="admin.php?mmb_mode=1">新規投稿</a></h3>', 2);
     $html .= cm\space_br('<h3 class="mmb_control"><a href="admin.php?mmb_mode=2">記事一覧</a></h3>', 2);
     $html .= cm\space_br('<h3 class="mmb_control"><a href="admin.php?mmb_mode=3">コメント管理</a></h3>', 2);
+    $html .= cm\space_br('<br><br><p><a href="' . MMB_INDEX . '">ブログトップへ戻る</a>', 2);
     return $html;
 }
 

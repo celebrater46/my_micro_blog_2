@@ -28,7 +28,7 @@ class PostArticle extends Article
 
     function save_body(){
         $path = MMB_PATH . "articles/" . $this->date . ".txt";
-        error_log($this->lines[0] . "\n", 3, $path);
+        error_log($this->lines[0], 3, $path);
     }
 
     function update_article_list(){
@@ -36,20 +36,27 @@ class PostArticle extends Article
         $str = $this->category_id1 . "|" . $this->category_id2 . "|" . $this->date . "|" . $this->title . "|" . $this->date_string2 . "|0";
         $path = MMB_PATH . "lists/articles.txt";
         $index_result = unlink($path);
+        $inserted = false;
         echo $path . ($index_result ? ' の削除に成功しました。' . '<br>' : ' の削除に失敗しました。' . '<br>');
         foreach ($list as $line){
-            $temp = file($line);
+            $temp = explode("|", $line);
+            var_dump($temp);
             if((int)$temp[2] <= $this->date){
-                error_log($line . "\n", 3, $path);
+                error_log($line, 3, $path);
                 echo '[' . $line . '] を ' . $path . 'に追加しました。' . '<br>';
             }
-            error_log($str . "\n", 3, $path);
-            echo '[' . $str . '] を ' . $path . 'に追加しました。' . '<br>';
             if((int)$temp[2] > $this->date){
-                error_log($line . "\n", 3, $path);
+                if($inserted === false){
+                    error_log($str . "\n", 3, $path);
+                    echo '[' . $str . '] を ' . $path . 'に追加しました。' . '<br>';
+                    $inserted = true;
+                }
+                error_log($line, 3, $path);
                 echo '[' . $line . '] を ' . $path . 'に追加しました。' . '<br>';
+//                echo 'TEST: (int)$temp[2] > $this->date' . "<br>";
             }
         }
+        var_dump($this->date);
     }
 
     function get_lines_from_post(){
