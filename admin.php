@@ -25,12 +25,23 @@ $state = new AdminState();
 if (isset($_SESSION['username'])) {
 //    echo 'Welcome ' .  h($_SESSION['username']) . ".<br><br>";
 //    echo "<a href='logout.php'>ログアウト</a>";
-    if($state->mmb_post !== null){
-        post_article();
-    } else {
-        echo get_admin_html($state);
-        exit;
+    switch ($state->mmb_post){
+        case 1:
+            post_article();
+            break;
+        case 3:
+            delete_article($state);
+            break;
+        default:
+            echo get_admin_html($state);
+            exit;
     }
+//    if($state->mmb_post !== null){
+//        post_article();
+//    } else {
+//        echo get_admin_html($state);
+//        exit;
+//    }
 } else {
     echo '404 Not Found.';
 }
@@ -146,10 +157,12 @@ function get_article_list_html(){
         $html = "";
         foreach ($list as $line){
             $temp = explode("|", $line);
+            $title = strlen($temp[3] >= 10) ? mb_substr($temp[3], 0, 9) . '…' : $temp[3];
 //            0|5|20220104|ブログのテストでーす|2022-01-04_09:33:33|0
             $html .= cm\space_br("<p>" . $i . "　｜　", 2);
-            $html .= cm\space_br('<a href="admin.php?mmb_mode=2&mmb_day=' . $temp[2] . '">' . $temp[3] . '</a>　｜　', 2);
-            $html .= cm\space_br($temp[4] . "</p>", 2);
+            $html .= cm\space_br('<a href="admin.php?mmb_mode=2&mmb_day=' . $temp[2] . '" title="' . $title . '">' . $title . '</a>　｜　', 2);
+            $html .= cm\space_br($temp[4] . "　｜　", 2);
+            $html .= cm\space_br('<a href="admin.php?mmb_mode=4&mmb_day=' . $temp[2] . '">[削除]</a>', 2);
             $i--;
         }
         return $html;
@@ -174,6 +187,15 @@ function get_menu_html(){
     return $html;
 }
 
+function get_delete_confirmation($state){
+    $html = cm\space_br('<h2>記事の削除</h2>', 2);
+    $html .= cm\space_br('<p>ID: ' . $state->mmb_day . ' の記事を削除します。</p>', 2);
+    $html .= cm\space_br('<p>削除された記事は復元できません。よろしいですか？</p><br><br>', 2);
+    $html .= cm\space_br('<p><a href="admin.php?mmb_post=3&mmb_day=' . $state->mmb_day . '">[削除する]</a>　｜　', 2);
+    $html .= cm\space_br('<a href="admin.php?mmb_mode=2">[削除せず一覧へ戻る]</a></p>', 2);
+    return $html;
+}
+
 function get_admin_html($state){
     $html = get_head_html();
     $html .= cm\space_br('<div class="admin container">', 1);
@@ -188,6 +210,7 @@ function get_admin_html($state){
         case 1: $html .= get_form_html(null); break;
 //        case 2: $html .= get_article_list_html($state); break;
         case 2: $html .= get_edit_articles_html($state); break;
+        case 4: $html .= get_delete_confirmation($state); break;
         default: $html .= get_menu_html(); break;
     }
     $html .= cm\space_br('<br><br><br>', 2);
@@ -203,4 +226,24 @@ function post_article(){
     $pa->update_article_list();
     $pa->save_body();
     var_dump($pa);
+}
+
+function delete_article($state){
+    $list = get_articles_list();
+    $article_txt =  MMB_PATH . "lists/articles.txt";
+    $article = MMB_PATH . "articles/" . $state->mmb_day . ".txt";
+    $index_result = unlink($article_txt);
+    $txt_result = unlink($article);
+    echo $article_txt . ($index_result ? ' の削除に成功しました。' . '<br>' : ' の削除に失敗しました。' . '<br>');
+    echo $article . ($txt_result ? ' の削除に成功しました。' . '<br>' : ' の削除に失敗しました。' . '<br>');
+    foreach ($list as $line){
+        $temp = explode("|", $line);
+        if((int)$temp[2] === $state->mmb_day){
+            continue;
+        } else {
+            error_log($line, 3, $article_txt);
+            echo '[' . $line . '] を ' . $article_txt . 'に追加しました。' . '<br>';
+        }
+    }
+    echo '<br><br><a href="admin.php">戻る</a>';
 }
