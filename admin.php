@@ -182,12 +182,47 @@ function get_article_delete_confirmation($state){
     return $html;
 }
 
+function get_contributor($state){
+    $index_path = MMB_PHBBS_PATH . "bbs/lists/" . MMB_PHBBS_THREAD_INIT . $state->mmb_day . ".log";
+    if(file_exists($index_path)){
+        $index_list = file($index_path);
+//        var_dump($index_list);
+        foreach ($index_list as $line){
+            $exploded = explode("<>", $line);
+            if((int)$exploded[0] === $state->mmb_comment){
+                return $exploded[4];
+            }
+        }
+        echo "コメントリストを検索しましたが、ID: " . $state->mmb_day . "_" . $state->mmb_comment . " の情報が見つかりませんでした。" . "<br>";
+        return "不明";
+    } else {
+        echo $index_path . " の読み込みに失敗しました。" . "<br>";
+        return "不明";
+    }
+}
+
 function get_comment_delete_confirmation($state){
-    $html = cm\space_br('<h2>コメントの削除</h2>', 2);
-    $html .= cm\space_br('<p>ID: ' . $state->mmb_day . "_" . $state->mmb_comment . ' のコメントを削除します。</p>', 2);
-    $html .= cm\space_br('<p>削除されたコメントは復元できません。よろしいですか？</p><br><br>', 2);
-    $html .= cm\space_br('<p><a href="admin.php?mmb_post=3&mmb_day=' . $state->mmb_day . '">[削除する]</a>　｜　', 2);
-    $html .= cm\space_br('<a href="admin.php?mmb_mode=2">[削除せず一覧へ戻る]</a></p>', 2);
+    $path = MMB_PHBBS_PATH . "bbs/comments/" . MMB_PHBBS_THREAD_INIT . $state->mmb_day . "/" . $state->mmb_comment . ".txt";
+    if(file_exists($path)){
+        $lines = file($path);
+        $contributor = get_contributor($state);
+        $html = cm\space_br('<h2>コメントの削除</h2>', 2);
+        $html .= cm\space_br('<hr>', 2);
+        $html .= cm\space_br('<p>投稿者： ' . $contributor . '</p>', 2);
+        $html .= cm\space_br('<hr>', 2);
+        foreach ($lines as $line){
+            $html .= cm\space_br('<p>' . $line . '</p>', 2);
+        }
+        $html .= cm\space_br('<hr>', 2);
+        $html .= cm\space_br('<p>上記 ID: ' . $state->mmb_day . "_" . $state->mmb_comment . ' のコメントを削除します。</p>', 2);
+        $html .= cm\space_br('<p>削除されたコメントは復元できません。よろしいですか？</p><br><br>', 2);
+        $html .= cm\space_br('<p><a href="admin.php?mmb_post=4&mmb_day=' . $state->mmb_day . '&mmb_comment=' . $state->mmb_comment . '">[削除する]</a>　｜　', 2);
+        $html .= cm\space_br('<a href="admin.php?mmb_mode=3">[削除せず一覧へ戻る]</a></p>', 2);
+    } else {
+        echo $path . " が見つからないか、読み込めません。" . "<br><br>";
+        echo '<a href="admin.php?mmb_mode=3">[削除せず一覧へ戻る]</a>';
+        exit;
+    }
     return $html;
 }
 
@@ -197,10 +232,12 @@ function get_delete_comments_html(){
     foreach ($list as $line){
         $exploded = explode("<>", $line);
 //        echo $line . "<br>";
-        $html .= cm\space_br("<p>", 2);
-        $html .= cm\space_br("記事ID:" . $exploded[13] . "_" . $exploded[0] . " | " . $exploded[4], 3);
-        $html .= cm\space_br('<a href="admin.php?mmb_mode=5&mmb_day=' . $exploded[13] . '&mmb_comment=' . $exploded[0] . '">　[削除する]</a>', 3);
-        $html .= cm\space_br("</p>", 2);
+        if($exploded[11] !== "__DELETED__"){
+            $html .= cm\space_br("<p>", 2);
+            $html .= cm\space_br("記事ID:" . $exploded[13] . "_" . $exploded[0] . " | " . $exploded[4], 3);
+            $html .= cm\space_br('<a href="admin.php?mmb_mode=5&mmb_day=' . $exploded[13] . '&mmb_comment=' . $exploded[0] . '">　[削除する]</a>', 3);
+            $html .= cm\space_br("</p>", 2);
+        }
     }
     $html .= cm\space_br("<br><br><a href='admin.php'>一覧へ戻る</a>", 2);
     return $html;
@@ -270,6 +307,26 @@ function delete_comment($state){
         error_log("-- 削除されました --", 3, $comment_path);
     } else {
         echo $comment_path . " が見つからないか、読み込めませんでした。" . "<br>";
+    }
+    $index_path = MMB_PHBBS_PATH . "bbs/lists/" . MMB_PHBBS_THREAD_INIT . $state->mmb_day . ".log";
+    if(file_exists($index_path)){
+        $lines = file($index_path);
+        $deleted_index = unlink($index_path);
+        echo $index_path . ($deleted_index ? " の削除に成功しました。" : " の削除に失敗しました。") . "<br>";
+        foreach ($lines as $line){
+            $exploded = explode("<>", $line);
+            if((int)$exploded[0] === $state->mmb_comment){
+                $exploded[11] = "__DELETED__";
+                $imploded = implode("<>", $exploded);
+                error_log($imploded, 3, $index_path);
+                echo $index_path . " に [" . $imploded . "] を追加しました。" . "<br>";
+            } else {
+                error_log($line, 3, $index_path);
+                echo $index_path . " に [" . $line . "] を追加しました。" . "<br>";
+            }
+        }
+    } else {
+        echo $index_path . " が見つからないか、読み込めませんでした。" . "<br>";
     }
 //    $index_path = MMB_PHBBS_PATH . 'bbs/lists/' . MMB_PHBBS_THREAD_INIT . $state->mmb_day . ".log";
 //    if(file_exists($index_path)){
