@@ -29,6 +29,9 @@ if (isset($_SESSION['username'])) {
         case 3:
             delete_article($state);
             break;
+        case 4:
+            delete_comment($state);
+            break;
         default:
             echo get_admin_html($state);
             exit;
@@ -170,12 +173,36 @@ function get_menu_html(){
     return $html;
 }
 
-function get_delete_confirmation($state){
+function get_article_delete_confirmation($state){
     $html = cm\space_br('<h2>記事の削除</h2>', 2);
     $html .= cm\space_br('<p>ID: ' . $state->mmb_day . ' の記事を削除します。</p>', 2);
     $html .= cm\space_br('<p>削除された記事は復元できません。よろしいですか？</p><br><br>', 2);
     $html .= cm\space_br('<p><a href="admin.php?mmb_post=3&mmb_day=' . $state->mmb_day . '">[削除する]</a>　｜　', 2);
     $html .= cm\space_br('<a href="admin.php?mmb_mode=2">[削除せず一覧へ戻る]</a></p>', 2);
+    return $html;
+}
+
+function get_comment_delete_confirmation($state){
+    $html = cm\space_br('<h2>コメントの削除</h2>', 2);
+    $html .= cm\space_br('<p>ID: ' . $state->mmb_day . "_" . $state->mmb_comment . ' のコメントを削除します。</p>', 2);
+    $html .= cm\space_br('<p>削除されたコメントは復元できません。よろしいですか？</p><br><br>', 2);
+    $html .= cm\space_br('<p><a href="admin.php?mmb_post=3&mmb_day=' . $state->mmb_day . '">[削除する]</a>　｜　', 2);
+    $html .= cm\space_br('<a href="admin.php?mmb_mode=2">[削除せず一覧へ戻る]</a></p>', 2);
+    return $html;
+}
+
+function get_delete_comments_html(){
+    $html = cm\space_br('<h2>コメント管理</h2>', 2);
+    $list = get_comments_list();
+    foreach ($list as $line){
+        $exploded = explode("<>", $line);
+//        echo $line . "<br>";
+        $html .= cm\space_br("<p>", 2);
+        $html .= cm\space_br("記事ID:" . $exploded[13] . "_" . $exploded[0] . " | " . $exploded[4], 3);
+        $html .= cm\space_br('<a href="admin.php?mmb_mode=5&mmb_day=' . $exploded[13] . '&mmb_comment=' . $exploded[0] . '">　[削除する]</a>', 3);
+        $html .= cm\space_br("</p>", 2);
+    }
+    $html .= cm\space_br("<br><br><a href='admin.php'>一覧へ戻る</a>", 2);
     return $html;
 }
 
@@ -186,7 +213,9 @@ function get_admin_html($state){
     switch($state->mmb_mode){
         case 1: $html .= get_form_html(null); break;
         case 2: $html .= get_edit_articles_html($state); break;
-        case 4: $html .= get_delete_confirmation($state); break;
+        case 3: $html .= get_delete_comments_html(); break;
+        case 4: $html .= get_article_delete_confirmation($state); break;
+        case 5: $html .= get_comment_delete_confirmation($state); break;
         default: $html .= get_menu_html(); break;
     }
     $html .= cm\space_br('<br><br><br>', 2);
@@ -230,5 +259,32 @@ function delete_article_core($state){
 
 function delete_article($state){
     delete_article_core($state);
+    echo '<br><br><a href="admin.php">戻る</a>';
+}
+
+function delete_comment($state){
+    $comment_path = MMB_PHBBS_PATH . 'bbs/comments/' . MMB_PHBBS_THREAD_INIT . $state->mmb_day . "/" . $state->mmb_comment . ".txt";
+    if(file_exists($comment_path)){
+        $deleted_comment = unlink($comment_path);
+        echo $comment_path . ($deleted_comment ? " の削除に成功しました。" : " の削除に失敗しました。") . "<br>";
+        error_log("-- 削除されました --", 3, $comment_path);
+    } else {
+        echo $comment_path . " が見つからないか、読み込めませんでした。" . "<br>";
+    }
+//    $index_path = MMB_PHBBS_PATH . 'bbs/lists/' . MMB_PHBBS_THREAD_INIT . $state->mmb_day . ".log";
+//    if(file_exists($index_path)){
+//        $lines = file($index_path);
+////        $deleted_index = unlink($index_path);
+////        echo $index_path . ($deleted_index ? " の削除に成功しました。" : " の削除に失敗しました。") . "<br>";
+////        $inserted = false;
+////        foreach ($lines as $line){
+////            $exploded = explode("<>", $line);
+////            if((int)$exploded[0] < $state->mmb_comment){
+////                error_log($line, 3, $article_txt);
+////            }
+////        }
+//    } else {
+//        echo $index_path . " が見つからないか、読み込めませんでした。" . "<br>";
+//    }
     echo '<br><br><a href="admin.php">戻る</a>';
 }
