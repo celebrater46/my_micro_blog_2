@@ -11,11 +11,6 @@ require_once dirname(__FILE__) . '/../main.php';
 class PostArticle extends Article
 {
     function post_init(){
-        // <input class="mmb_subtitle" type="text" name="subtitle" value="">
-        // <textarea class="mmb_body" name="body">
-        // <input class="mmb_date" type="text" name="date2" value="' . $date . '">
-        // <select class="mmb_category" name="category1">
-        // <select class="mmb_category" name="category2">
         $this->title = isset($_POST["subtitle"]) ? $_POST["subtitle"] : "無題";
         $this->date_string2 = $this->check_date();
         $this->date = $this->get_date();
@@ -40,7 +35,6 @@ class PostArticle extends Article
         echo $path . ($index_result ? ' の削除に成功しました。' . '<br>' : ' の削除に失敗しました。' . '<br>');
         foreach ($list as $line){
             $temp = explode("|", $line);
-            var_dump($temp);
             if((int)$temp[2] <= $this->date){
                 error_log($line, 3, $path);
                 echo '[' . $line . '] を ' . $path . 'に追加しました。' . '<br>';
@@ -53,10 +47,8 @@ class PostArticle extends Article
                 }
                 error_log($line, 3, $path);
                 echo '[' . $line . '] を ' . $path . 'に追加しました。' . '<br>';
-//                echo 'TEST: (int)$temp[2] > $this->date' . "<br>";
             }
         }
-        var_dump($this->date);
     }
 
     function get_lines_from_post(){
@@ -94,7 +86,6 @@ class PostArticle extends Article
         $i = 0;
         foreach ($list as $line){
             $temp = explode("|", $line);
-//            if(strpos($str, $line) !== false){
             if($temp[0] === $str){
                 return $i;
             } else {

@@ -26,7 +26,6 @@ class Category
             if (isset($temp[0]) && (int)$temp[0] === $this->id) {
                 array_push($this->articles, $temp[3]);
             }
-//            $i++;
         }
     }
 }

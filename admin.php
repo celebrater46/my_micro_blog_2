@@ -16,15 +16,9 @@ require_once MMB_HCM_PATH;
 
 session_start();
 
-//$mmb_mode = isset($_GET["mmb_mode"]) ? (int)$_GET["mmb_mode"] : null;
-//$mmb_day = isset($_GET["mmb_day"]) ? (int)$_GET["mmb_day"] : null;
-//$page = isset($_GET["page"]) ? (int)$_GET["page"] : null;
-
 $state = new AdminState();
 
 if (isset($_SESSION['username'])) {
-//    echo 'Welcome ' .  h($_SESSION['username']) . ".<br><br>";
-//    echo "<a href='logout.php'>ログアウト</a>";
     switch ($state->mmb_post){
         case 1:
             post_article();
@@ -39,26 +33,15 @@ if (isset($_SESSION['username'])) {
             echo get_admin_html($state);
             exit;
     }
-//    if($state->mmb_post !== null){
-//        post_article();
-//    } else {
-//        echo get_admin_html($state);
-//        exit;
-//    }
 } else {
     echo '404 Not Found.';
 }
-
-//function h($s){
-//    return htmlspecialchars($s, ENT_QUOTES, 'utf-8');
-//}
 
 function get_foot_html(){
     return <<<EOT
 </body>
 </html>
 EOT;
-
 }
 
 function get_head_html(){
@@ -75,7 +58,6 @@ EOT;
 }
 
 function get_category_select($num, $list, $selected){
-//    var_dump($list);
     if($list !== null){
         $html = cm\space_br('<select class="mmb_category" name="category' . $num . '">', 3);
         foreach ($list as $line){
@@ -136,12 +118,6 @@ function get_form_html($state){
     $html .= cm\space_br('<span class="mmb_form">日時：</span>', 5);
     $html .= cm\space_br('</label><br>', 4);
     $html .= cm\space_br('<input class="mmb_date" type="text" name="date2" value="' . $date . '">', 4);
-//    $html .= cm\space_br('<input class="mmb_year" type="text" name="year" value="">年', 4);
-//    $html .= cm\space_br('<input class="mmb_month" type="text" name="month" value="">月', 4);
-//    $html .= cm\space_br('<input class="mmb_day" type="text" name="day" value="">日', 4);
-//    $html .= cm\space_br('<input class="mmb_hour" type="text" name="hour" value="">時', 4);
-//    $html .= cm\space_br('<input class="mmb_minute" type="text" name="minute" value="">分', 4);
-//    $html .= cm\space_br('<input class="mmb_second" type="text" name="second" value="">秒', 4);
     $list = get_categories_list();
     $html .= get_category_select(1, $list, $article->category1);
     $html .= get_category_select(2, $list, $article->category2);
@@ -156,21 +132,18 @@ function get_form_html($state){
 
 function get_article_list_html(){
     $list = get_articles_list();
-//    rsort($list);
     if($list !== null){
-//        $i = count($list);
         $i = 1;
         $html = "";
         foreach ($list as $line){
             $temp = explode("|", $line);
             $title = strlen($temp[3] >= 10) ? mb_substr($temp[3], 0, 9) . '…' : $temp[3];
-//            0|5|20220104|ブログのテストでーす|2022-01-04_09:33:33|0
+            // 0|5|20220104|ブログのテストでーす|2022-01-04_09:33:33|0
             $html .= cm\space_br("<p>" . $i . "　｜　", 2);
             $html .= cm\space_br('<a href="admin.php?mmb_mode=2&mmb_day=' . $temp[2] . '" title="' . $title . '">' . $title . '</a>　｜　', 3);
             $html .= cm\space_br($temp[4] . "　｜　", 3);
             $html .= cm\space_br('<a href="admin.php?mmb_mode=4&mmb_day=' . $temp[2] . '">[削除]</a>', 3);
             $html .= cm\space_br("</p>", 2);
-//            $i--;
             $i++;
         }
         $html .= cm\space_br('<br><br><p><a href="admin.php">パネルトップへ戻る</a>', 2);
@@ -210,15 +183,8 @@ function get_admin_html($state){
     $html = get_head_html();
     $html .= cm\space_br('<div class="admin container">', 1);
     $html .= cm\space_br('<h1>My Micro Blog - My Page</h1>', 2);
-//    if($mode === null){
-//        $html .= get_form_html(null);
-//    } else {
-//        $html .= get_article_list_html();
-//    }
-//    var_dump($mode);
     switch($state->mmb_mode){
         case 1: $html .= get_form_html(null); break;
-//        case 2: $html .= get_article_list_html($state); break;
         case 2: $html .= get_edit_articles_html($state); break;
         case 4: $html .= get_delete_confirmation($state); break;
         default: $html .= get_menu_html(); break;
@@ -235,7 +201,7 @@ function post_article(){
     $pa->post_init();
     $pa->update_article_list();
     $pa->save_body();
-    var_dump($pa);
+    echo '<br><br><a href="admin.php">戻る</a>';
 }
 
 function edit_article($state){

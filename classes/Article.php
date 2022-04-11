@@ -18,7 +18,6 @@ class Article
     public $category2 = "未分類";
     public $imgs = [];
     public $lines = [];
-//    public $line;
 
     function __construct(){
         // $line == 1|2|20211231|去年のタイトルです|2021-12-31_09:33:33|0
