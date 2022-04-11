@@ -15,15 +15,10 @@ require_once "classes/Comment.php";
 
 function count_comments_in_one_article($date){
     $list = get_comments_list();
-//    var_dump($list);
     if($list !== null){
-        $array = [];
         $num = 0;
         foreach ($list as $line){
             $temp = explode("<>", $line);
-//            echo "var temp in count_comments_in_one_article()" . "<br>";
-//            var_dump($temp);
-//            echo "<br>";
             if($temp[11] !== "__DELETED__" && (int)$temp[13] === $date){
                 $num++;
             }
@@ -36,9 +31,6 @@ function count_comments_in_one_article($date){
 
 function get_comments(){
     $list = get_comments_list();
-//    echo "var list in get_comments()" . "<br>";
-//    var_dump($list);
-//    echo "<br>";
     $articles_list = get_articles_list();
     if($list !== null){
         $array = [];
@@ -77,9 +69,7 @@ function get_months($list){
 }
 
 function get_articles($list){
-//    $list_per_page = get_list_per_page($list, MMB_MAX_ARTICLES_PER_PAGE); // max:
     $new_array = [];
-//    foreach ($list_per_page as $line){
     foreach ($list as $line){
         $article = new Article();
         $article->init($line);
@@ -87,36 +77,6 @@ function get_articles($list){
     }
     return $new_array;
 }
-
-// "5", "false", "false" ...
-//function get_setting(){
-//    if(file_exists("setting.txt")){
-//        /*
-//            max:5
-//            fold:false
-//            comment:false
-//            comment_permit:false
-//            new_comments:5
-//            new_articles:5
-//        */
-//        $list = file("setting.txt");
-//        $list = str_replace([
-//            "max:",
-//            "fold:",
-//            "comment:",
-//            "comment_permit:",
-//            "new_comments:",
-//            "new_articles:",
-//            " ",
-//            "\n",
-//            "\r",
-//            "\r\n"
-//        ], "", $list);
-//        return $list;
-//    } else {
-//        return null;
-//    }
-//}
 
 function add_thread_name_to_list_line($log){
     $date = str_replace([MMB_PHBBS_PATH . "bbs/lists/" . MMB_PHBBS_THREAD_INIT, ".log"], "", $log); // 20211231
@@ -129,16 +89,11 @@ function add_thread_name_to_list_line($log){
 }
 
 function get_comments_list(){
-//    $list = MMB_PATH . "lists/comments.txt.old";
     $logs = glob(MMB_PHBBS_PATH . "bbs/lists/*");
-//    var_dump($logs);
     if($logs !== false){
         $lines = [];
         foreach ($logs as $log){
             if(strpos($log, MMB_PHBBS_THREAD_INIT) !== false){
-//            array_push($array, $log);
-//                var_dump($log);
-//                array_push($lines, add_thread_name_to_list_line($log));
                 $array = add_thread_name_to_list_line($log);
                 foreach ($array as $line){
                     array_push($lines, $line);
@@ -150,15 +105,13 @@ function get_comments_list(){
         echo "ERROR: " . MMB_PHBBS_PATH . "bbs/lists が存在しないか、読み込めません。";
         return null;
     }
-
-
-    $list = MMB_PHBBS_PATH . "bbs/lists/" . MMB_PHBBS_THREAD_INIT . $state->mmb_day . ".log";
-    if(file_exists($list)){
-        return file($list);
-    } else {
-        echo "ERROR: " . $list . " が存在しないか、読み込めません。";
-        return null;
-    }
+//    $list = MMB_PHBBS_PATH . "bbs/lists/" . MMB_PHBBS_THREAD_INIT . $state->mmb_day . ".log";
+//    if(file_exists($list)){
+//        return file($list);
+//    } else {
+//        echo "ERROR: " . $list . " が存在しないか、読み込めません。";
+//        return null;
+//    }
 }
 
 function get_categories_list(){
@@ -166,7 +119,6 @@ function get_categories_list(){
         $list = file(MMB_PATH . "lists/categories.txt");
         array_unshift($list, "未分類|unknown|0");
         return $list;
-//        return file(MMB_PATH . "lists/categories.txt");
     } else {
         echo "ERROR: categories.txt が存在しないか、読み込めません。";
         return null;
@@ -217,22 +169,6 @@ function get_articles_list(){
         return null;
     }
 }
-
-//function get_list_per_page($list, $max){
-//    $temp_array = [];
-//    if((int)$max > 0){
-//        for($i = 0; $i < $max; $i++){
-//            if(isset($list[$i])){
-//                array_push($temp_array, $list[$i]);
-//            } else {
-//                break;
-//            }
-//        }
-//        return $temp_array;
-//    } else {
-//        return $list;
-//    }
-//}
 
 // 202101, 202102 ...
 function get_month_array($list){

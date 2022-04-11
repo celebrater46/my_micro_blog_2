@@ -32,7 +32,6 @@ function get_comment_ul($comments, $state){
     $html .= cm\space_br('<hr>', 4);
     $html .= cm\space_br('<h2>' . "新着コメント" . '</h2>', 4);
     $html .= cm\space_br('<ul class="mmb_comments">', 4);
-//    var_dump($comments);
     foreach ($comments as $comment){
         if($comment->deleted === false){
             $parameters = [
@@ -127,16 +126,6 @@ function get_article_footer_html($article, $state){
     $html .= cm\space_br('<a href="' . MMB_INDEX . '?' . $state->get_new_url_parameters($parameters2, "") . '">', 6);
     $html .= cm\space_br("コメント（" . $comments_num . "）", 7);
     $html .= cm\space_br('</a>', 6);
-//    if($comments_num > 0){
-//        $parameters2["mmb_category"] = null;
-//        $parameters2["mmb_day"] = $article->date;
-//        $html .= cm\space_br('<a href="' . MMB_INDEX . '?' . $state->get_new_url_parameters($parameters2, "") . '">', 6);
-//        $html .= cm\space_br("コメント（" . $comments_num . "）", 7);
-//        $html .= cm\space_br('</a>', 6);
-//    } else {
-//        $html .= cm\space_br("コメント（" . $comments_num . "）", 6);
-//    }
-
     $html .= cm\space_br('</p>', 5);
     $html .= cm\space_br('</div>', 4);
     return $html;
@@ -144,11 +133,9 @@ function get_article_footer_html($article, $state){
 
 function get_articles_html($articles, $state){
     rsort($articles);
-//    var_dump($articles);
     $html = "";
     $start_article = ($state->page - 1) * MMB_MAX_ARTICLES_PER_PAGE;
     $end_article = $state->page * MMB_MAX_ARTICLES_PER_PAGE;
-//    foreach ($articles as $article){
     for($i = $start_article; $i < $end_article; $i++){
         if(isset($articles[$i])){
             $parameters = [
@@ -175,7 +162,6 @@ function get_articles_html($articles, $state){
             $html .= cm\space_br('</div>', 3);
             if(MMB_COMMENT && $state->mmb_day !== null){
                 $parameters["mmb_mode"] = 11; // 1-5 are for Admin Mode
-//                $posted_url = MMB_PATH_HTTP . "posted_comment.php";
                 $html .= cm\space_br('<hr>', 3);
                 $html .= cm\space_br('<h3>コメント</h3>', 3);
                 $html .= phbbs\phbbs_get_html("mmb_" . $state->mmb_day, MMB_INDEX);
@@ -197,7 +183,6 @@ function get_splitter_div($state){
     $categories = get_categories($state, $list);
     $months = get_months($list);
     $comments = get_comments();
-//    var_dump($comments);
     $extracted = extract_articles_list($list, $state, $months);
     $articles = get_articles($extracted);
     $html = cm\space_br('<div class="mmb_splitter">', 1);
@@ -237,12 +222,5 @@ function mmb_get_html(){
         $html = get_head_html();
         $html .= get_splitter_div($state);
     }
-//    $list = get_articles_list(); // 220101|これはタイトルです|カテゴリ1|カテゴリ2, 220103|テストタイトルです|カテゴリ3|カテゴリ2...
-//    $categories = get_categories($state, $list);
-//    $months = get_months($list);
-//    $extracted = extract_articles_list($list, $state, $months);
-//    $articles = get_articles($extracted);
-//    $html = get_head_html();
-//    $html .= get_splitter_div($state);
     return $html;
 }

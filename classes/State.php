@@ -20,8 +20,6 @@ class State
 
     function get_ques_or_and($str){
         return $str !== "" ? "&" : "";
-//        if(strpos($str, "?") === false)
-//        return strpos($str, "?") === false ? "?" : "&";
     }
 
     // $array = ["hoge" => 1, "fuga" => 2 ... ]
@@ -41,13 +39,7 @@ class State
         $parameter_str .= $parameters["mmb_month"] === null ? "" : $this->get_ques_or_and($parameter_str) . "mmb_month=" . $parameters["mmb_month"];
         $parameter_str .= $parameters["mmb_day"] === null ? "" : $this->get_ques_or_and($parameter_str) . "mmb_day=" . $parameters["mmb_day"];
         $parameter_str .= $parameters["page"] === null ? "" : $this->get_ques_or_and($parameter_str) . "page=" . $parameters["page"];
-        return $parameter_str;
-//        $mode = $parameters["mmb_mode"] === null ? "" : "mmb_mode=" . $parameters["mmb_mode"];
-//        $category = $parameters["mmb_category"] === null ? "" : "mmb_category=" . $parameters["mmb_category"];
-//        $month = $parameters["mmb_month"] === null ? "" : "&mmb_month=" . $parameters["mmb_month"];
-//        $day = $parameters["mmb_day"] === null ? "" : "&mmb_day=" . $parameters["mmb_day"];
-//        $page = $parameters["page"] === null ? "" : "&page=" . $parameters["page"];
-//        return $category . $month . $day . $additional;
+        return $parameter_str . $additional;
     }
 
     function get_url_parameters($additional){
@@ -56,11 +48,6 @@ class State
         $parameter_str .= $this->mmb_month === null ? "" : $this->get_ques_or_and($parameter_str) . "mmb_month=" . $this->mmb_month;
         $parameter_str .= $this->mmb_day === null ? "" : $this->get_ques_or_and($parameter_str) . "mmb_day=" . $this->mmb_day;
         $parameter_str .= $this->page === null ? "" : $this->get_ques_or_and($parameter_str) . "page=" . $this->page;
-        return $parameter_str;
-//        $category = $this->mmb_category === null ? "" : "mmb_category=" . $this->mmb_category;
-//        $month = $this->mmb_month === null ? "" : "&mmb_month=" . $this->mmb_month;
-//        $day = $this->mmb_day === null ? "" : "&mmb_day=" . $this->mmb_day;
-//        $page = $this->page === null ? "" : "&page=" . $this->page;
-//        return $category . $month . $day . $this->page . $additional;
+        return $parameter_str . $additional;
     }
 }

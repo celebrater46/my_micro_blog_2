@@ -329,20 +329,5 @@ function delete_comment($state){
     } else {
         echo $index_path . " が見つからないか、読み込めませんでした。" . "<br>";
     }
-//    $index_path = MMB_PHBBS_PATH . 'bbs/lists/' . MMB_PHBBS_THREAD_INIT . $state->mmb_day . ".log";
-//    if(file_exists($index_path)){
-//        $lines = file($index_path);
-////        $deleted_index = unlink($index_path);
-////        echo $index_path . ($deleted_index ? " の削除に成功しました。" : " の削除に失敗しました。") . "<br>";
-////        $inserted = false;
-////        foreach ($lines as $line){
-////            $exploded = explode("<>", $line);
-////            if((int)$exploded[0] < $state->mmb_comment){
-////                error_log($line, 3, $article_txt);
-////            }
-////        }
-//    } else {
-//        echo $index_path . " が見つからないか、読み込めませんでした。" . "<br>";
-//    }
     echo '<br><br><a href="admin.php">戻る</a>';
 }
