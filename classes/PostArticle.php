@@ -32,9 +32,24 @@ class PostArticle extends Article
     }
 
     function update_article_list(){
+        $list = get_articles_list();
         $str = $this->category_id1 . "|" . $this->category_id2 . "|" . $this->date . "|" . $this->title . "|" . $this->date_string2 . "|0";
         $path = MMB_PATH . "lists/articles.txt";
-        error_log($str . "\n", 3, $path);
+        $index_result = unlink($path);
+        echo $path . ($index_result ? ' の削除に成功しました。' . '<br>' : ' の削除に失敗しました。' . '<br>');
+        foreach ($list as $line){
+            $temp = file($line);
+            if((int)$temp[2] <= $this->date){
+                error_log($line . "\n", 3, $path);
+                echo '[' . $line . '] を ' . $path . 'に追加しました。' . '<br>';
+            }
+            error_log($str . "\n", 3, $path);
+            echo '[' . $str . '] を ' . $path . 'に追加しました。' . '<br>';
+            if((int)$temp[2] > $this->date){
+                error_log($line . "\n", 3, $path);
+                echo '[' . $line . '] を ' . $path . 'に追加しました。' . '<br>';
+            }
+        }
     }
 
     function get_lines_from_post(){

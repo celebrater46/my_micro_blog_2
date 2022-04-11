@@ -29,6 +29,9 @@ if (isset($_SESSION['username'])) {
         case 1:
             post_article();
             break;
+        case 2:
+            edit_article();
+            break;
         case 3:
             delete_article($state);
             break;
@@ -113,7 +116,7 @@ function get_form_html($state){
     $subtitle = $article === null ? "" : $article->title;
     $date = $article === null ? date('Y-m-d_H:i:s') : $article->date_string2;
     $html = cm\space_br('<h2>新規投稿</h2>', 2);
-    $html .= cm\space_br('<form action="admin.php?mmb_post=1" method="post">', 2);
+    $html .= cm\space_br('<form action="admin.php?mmb_post=' . $state->mmb_mode . '" method="post">', 2);
     $html .= cm\space_br('<div class="mmb_form">', 3);
     $html .= cm\space_br('<label>', 4);
     $html .= cm\space_br('<span class="mmb_form">タイトル：</span>', 5);
@@ -228,7 +231,12 @@ function post_article(){
     var_dump($pa);
 }
 
-function delete_article($state){
+function edit_article($state){
+    delete_article_core($state);
+    post_article();
+}
+
+function delete_article_core($state){
     $list = get_articles_list();
     $article_txt =  MMB_PATH . "lists/articles.txt";
     $article = MMB_PATH . "articles/" . $state->mmb_day . ".txt";
@@ -245,5 +253,9 @@ function delete_article($state){
             echo '[' . $line . '] を ' . $article_txt . 'に追加しました。' . '<br>';
         }
     }
+}
+
+function delete_article($state){
+    delete_article_core($state);
     echo '<br><br><a href="admin.php">戻る</a>';
 }
