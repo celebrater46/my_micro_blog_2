@@ -24,7 +24,7 @@ function count_comments_in_one_article($date){
 //            echo "var temp in count_comments_in_one_article()" . "<br>";
 //            var_dump($temp);
 //            echo "<br>";
-            if((int)$temp[13] === $date){
+            if($temp[11] !== "__DELETED__" && (int)$temp[13] === $date){
                 $num++;
             }
         }

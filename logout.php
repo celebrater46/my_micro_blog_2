@@ -4,7 +4,7 @@ session_start();
 
 $output = '';
 
-if (isset($_SESSION["EMAIL"])) {
+if (isset($_SESSION["username"])) {
     $output = 'Logged out.';
 } else {
     $output = 'The session has timed out.';
