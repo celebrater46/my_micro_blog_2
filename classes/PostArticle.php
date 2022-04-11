@@ -26,9 +26,15 @@ class PostArticle extends Article
         error_log($this->lines[0], 3, $path);
     }
 
+    function add_posted_articles_line($path){
+        $str = $this->category_id1 . "|" . $this->category_id2 . "|" . $this->date . "|" . $this->title . "|" . $this->date_string2 . "|0";
+        error_log($str . "\n", 3, $path);
+        echo '[' . $str . '] を ' . $path . 'に追加しました。' . '<br>';
+    }
+
     function update_article_list(){
         $list = get_articles_list();
-        $str = $this->category_id1 . "|" . $this->category_id2 . "|" . $this->date . "|" . $this->title . "|" . $this->date_string2 . "|0";
+//        $str = $this->category_id1 . "|" . $this->category_id2 . "|" . $this->date . "|" . $this->title . "|" . $this->date_string2 . "|0";
         $path = MMB_PATH . "lists/articles.txt";
         $index_result = unlink($path);
         $inserted = false;
@@ -41,13 +47,17 @@ class PostArticle extends Article
             }
             if((int)$temp[2] > $this->date){
                 if($inserted === false){
-                    error_log($str . "\n", 3, $path);
-                    echo '[' . $str . '] を ' . $path . 'に追加しました。' . '<br>';
+                    $this->add_posted_articles_line($path);
+//                    error_log($str . "\n", 3, $path);
+//                    echo '[' . $str . '] を ' . $path . 'に追加しました。' . '<br>';
                     $inserted = true;
                 }
                 error_log($line, 3, $path);
                 echo '[' . $line . '] を ' . $path . 'に追加しました。' . '<br>';
             }
+        }
+        if($inserted === false){
+            $this->add_posted_articles_line($path);
         }
     }
 

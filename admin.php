@@ -103,7 +103,7 @@ function get_form_html($state){
     $body = implode("\n", $article->lines);
     $body = str_replace("\n　\n", "\n", $body);
     $html = cm\space_br('<h2>新規投稿</h2>', 2);
-    $html .= cm\space_br('<form action="admin.php?mmb_post=' . $state->mmb_mode . ($state->mmb_day !== null ? "&mmb_day=" . $state->mmb_day : "") . '" method="post">', 2);
+    $html .= cm\space_br('<form action="admin.php?mmb_post=' . (isset($state->mmb_mode) ? $state->mmb_mode : 1) . ($state->mmb_day !== null ? "&mmb_day=" . $state->mmb_day : "") . '" method="post">', 2);
     $html .= cm\space_br('<div class="mmb_form">', 3);
     $html .= cm\space_br('<label>', 4);
     $html .= cm\space_br('<span class="mmb_form">タイトル：</span>', 5);
@@ -125,7 +125,7 @@ function get_form_html($state){
     $html .= get_category_select(1, $list, $article->category1);
     $html .= get_category_select(2, $list, $article->category2);
     $html .= cm\space_br('</div>', 3);
-    $html .= cm\space_br('<p>※自国記入例：2022-04-01_02:02:03（未入力なら現在時刻）</p>', 3);
+    $html .= cm\space_br('<p>※日時記入例：2022-04-01_02:02:03（未入力なら現在時刻）</p>', 3);
     $html .= cm\space_br('<input type="submit" value="投稿する">', 3);
     $html .= cm\space_br('</form>', 2);
     $html .= cm\space_br('<br>', 2);
